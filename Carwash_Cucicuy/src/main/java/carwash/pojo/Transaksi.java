@@ -13,9 +13,6 @@ public class Transaksi {
     private int id;
     private Pegawai pegawai;
     private Member member;
-    private String namaPelanggan;
-    private String alamatPelanggan;
-    private String noHpPelanggan;
     private String tanggalTransaksi;
     private String jenisMobil;
     private String platNomor;
@@ -48,30 +45,6 @@ public class Transaksi {
 
     public void setMember(Member member) {
         this.member = member;
-    }
-
-    public String getNamaPelanggan() {
-        return namaPelanggan;
-    }
-
-    public void setNamaPelanggan(String namaPelanggan) {
-        this.namaPelanggan = namaPelanggan;
-    }
-
-    public String getAlamatPelanggan() {
-        return alamatPelanggan;
-    }
-
-    public void setAlamatPelanggan(String alamatPelanggan) {
-        this.alamatPelanggan = alamatPelanggan;
-    }
-
-    public String getNoHpPelanggan() {
-        return noHpPelanggan;
-    }
-
-    public void setNoHpPelanggan(String noHpPelanggan) {
-        this.noHpPelanggan = noHpPelanggan;
     }
 
     public String getTanggalTransaksi() {

@@ -51,7 +51,7 @@ public class MemberServiceImpl implements MemberService{
             }
             conMan.disconnect();
         } catch (SQLException e) {
-            Logger.getLogger(AdminServiceImpl.class.getName())
+            Logger.getLogger(MemberServiceImpl.class.getName())
                     .log(Level.SEVERE, null, e);
         }
         
@@ -76,7 +76,7 @@ public class MemberServiceImpl implements MemberService{
             stmt.executeUpdate(sql);
             conMan.disconnect();
         } catch (SQLException e) {
-            Logger.getLogger(AdminServiceImpl.class.getName())
+            Logger.getLogger(MemberServiceImpl.class.getName())
                     .log(Level.SEVERE, null, e);
         }
         return result;
@@ -100,7 +100,7 @@ public class MemberServiceImpl implements MemberService{
             stmt.executeUpdate(sql);
             conMan.disconnect();
         } catch (SQLException e) {
-            Logger.getLogger(AdminServiceImpl.class.getName())
+            Logger.getLogger(MemberServiceImpl.class.getName())
                     .log(Level.SEVERE, null, e);
         }
         return result;
@@ -129,7 +129,7 @@ public class MemberServiceImpl implements MemberService{
             }
             conMan.disconnect();
         } catch (SQLException e) {
-            Logger.getLogger(AdminServiceImpl.class.getName())
+            Logger.getLogger(MemberServiceImpl.class.getName())
                     .log(Level.SEVERE, null, e);
         }
         return member;
@@ -148,7 +148,7 @@ public class MemberServiceImpl implements MemberService{
             stmt.executeUpdate(sql);
             conMan.disconnect();
         } catch (SQLException e) {
-            Logger.getLogger(AdminServiceImpl.class.getName())
+            Logger.getLogger(MemberServiceImpl.class.getName())
                     .log(Level.SEVERE, null, e);
         }
         return result;

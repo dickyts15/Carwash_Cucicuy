@@ -29,10 +29,10 @@ public class AdminServiceImpl implements AdminService {
     public Admin login(String username, String password) {
         Admin admin = null;
 
-        String sql = "SELECT id, nama, username, password"
-                + "FROM admin"
+        String sql = "SELECT id, nama, username, password "
+                + "FROM admin "
                 + "WHERE username = '" + username + "' "
-                + "AND password = '" + password + "' ";
+                + "AND password = '" + password + "'";
 
         conMan = new ConnectionManager();
         conn = conMan.connect();
