@@ -42,7 +42,7 @@ public class TransaksiServiceImpl implements TransaksiService {
 
         String sql = "SELECT t.id_transaksi,peg.id,peg.nama,mem.id,mem.nama,mem.alamat,mem.noHp,"
                 + "t.tanggal_transaksi,t.jenis_mobil,t.plat_nomor,pen.id,pen.jenis,add.id,add.namaAdd,"
-                + "pen.harga + add.harga as t.total_harga "
+                + "t.total_harga "
                 + "FROM transaksi t, pegawai peg, member mem, pencucian pen, additional add"
                 + "WHERE t.id_pegawai = peg.id AND t.id_member = mem.id AND"
                 + "t.id_pencucian = pen.id AND t.id_additional = add.id";
