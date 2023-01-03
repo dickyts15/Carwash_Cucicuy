@@ -7,6 +7,9 @@ package carwash.view.swing;
 import carwash.pojo.Admin;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.net.URL;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -22,6 +25,8 @@ public class Dashboard extends javax.swing.JFrame {
     public Dashboard() {
         initComponents();
         this.setLocationRelativeTo(null);
+        java.net.URL icon = getClass().getResource("/carwash/images/carwash.jpg");
+        Icon icon1 = new ImageIcon(icon);
     }
 
     public void close() {
@@ -48,7 +53,7 @@ public class Dashboard extends javax.swing.JFrame {
         btnAdd = new javax.swing.JButton();
         btnTransaksi = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        Logo = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
 
@@ -151,7 +156,9 @@ public class Dashboard extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(0, 0, 0));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/carwash/images/carwash.jpg"))); // NOI18N
+        Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/carwash/images/carwash.jpg"))); // NOI18N
+        URL icon = getClass().getResource("/carwash/images/carwash.jpg");
+        Icon icon1 = new ImageIcon(icon);
 
         jPanel2.setBackground(new java.awt.Color(130, 170, 227));
 
@@ -170,7 +177,7 @@ public class Dashboard extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(9, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addContainerGap())
         );
@@ -181,14 +188,14 @@ public class Dashboard extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(41, 41, 41)
-                .addComponent(jLabel1)
+                .addComponent(Logo)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addComponent(Logo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -275,12 +282,12 @@ public class Dashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public javax.swing.JLabel Logo;
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnMember;
     private javax.swing.JButton btnPegawai;
     private javax.swing.JButton btnPencucian;
     private javax.swing.JButton btnTransaksi;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
