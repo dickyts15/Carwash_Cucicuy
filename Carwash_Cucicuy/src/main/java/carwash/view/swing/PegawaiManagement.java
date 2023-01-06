@@ -150,7 +150,6 @@ public class PegawaiManagement extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tblPegawai);
 
         btnSave.setBackground(new java.awt.Color(204, 204, 204));
-        btnSave.setIcon(new javax.swing.ImageIcon("C:\\Users\\Lenovo\\Downloads\\save.png")); // NOI18N
         btnSave.setText("Save");
         btnSave.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -160,7 +159,6 @@ public class PegawaiManagement extends javax.swing.JFrame {
         });
 
         btnUpdate.setBackground(new java.awt.Color(204, 204, 204));
-        btnUpdate.setIcon(new javax.swing.ImageIcon("C:\\Users\\Lenovo\\Downloads\\update.png")); // NOI18N
         btnUpdate.setText("Update");
         btnUpdate.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -170,7 +168,6 @@ public class PegawaiManagement extends javax.swing.JFrame {
         });
 
         btnDelete.setBackground(new java.awt.Color(204, 204, 204));
-        btnDelete.setIcon(new javax.swing.ImageIcon("C:\\Users\\Lenovo\\Downloads\\delete-file.png")); // NOI18N
         btnDelete.setText("Delete");
         btnDelete.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -180,7 +177,6 @@ public class PegawaiManagement extends javax.swing.JFrame {
         });
 
         btnClear.setBackground(new java.awt.Color(204, 204, 204));
-        btnClear.setIcon(new javax.swing.ImageIcon("C:\\Users\\Lenovo\\Downloads\\broom.png")); // NOI18N
         btnClear.setText("Clear");
         btnClear.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnClear.addActionListener(new java.awt.event.ActionListener() {
@@ -268,12 +264,10 @@ public class PegawaiManagement extends javax.swing.JFrame {
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())

@@ -156,7 +156,6 @@ public class Dashboard extends javax.swing.JFrame {
 
         jPanel3.setBackground(new java.awt.Color(0, 0, 0));
 
-        Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/carwash/images/carwash.jpg"))); // NOI18N
         URL icon = getClass().getResource("/carwash/images/carwash.jpg");
         Icon icon1 = new ImageIcon(icon);
 

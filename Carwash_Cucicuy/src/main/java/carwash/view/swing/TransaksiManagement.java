@@ -4,6 +4,25 @@
  */
 package carwash.view.swing;
 
+import carwash.pojo.Additional;
+import carwash.pojo.Member;
+import carwash.pojo.Pegawai;
+import carwash.pojo.Pencucian;
+import carwash.pojo.Transaksi;
+import carwash.service.AdditionalService;
+import carwash.service.MemberService;
+import carwash.service.PegawaiService;
+import carwash.service.PencucianService;
+import carwash.service.TransaksiService;
+import carwash.serviceImpl.PencucianServiceImpl;
+import carwash.serviceImpl.TransaksiServiceImpl;
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ASUS
@@ -13,10 +32,89 @@ public class TransaksiManagement extends javax.swing.JFrame {
     /**
      * Creates new form TransaksiManagement
      */
+    TransaksiService transaksiService;
+    PencucianService pencucianService;
+    AdditionalService additionalService;
+    MemberService memberService;
+    PegawaiService pegawaiService;
+
     public TransaksiManagement() {
         initComponents();
         this.setLocationRelativeTo(null);
-        //loadData();
+        loadData();
+    }
+
+    public void close() {
+        WindowEvent we = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(we);
+    }
+
+    private void emptyField() {
+        txtIdTransaksi.setText("");
+        txtIdPegawai.setText("");
+        txtIdMember.setText("");
+        CBoxPencucian.setSelectedIndex(0);
+        CBoxAdditional.setSelectedIndex(0);
+        txtTanggal.setText("dd-mm-yyyy");
+        txtJenisMobil.setText("");
+        txtPlatNomor.setText("");
+        txtHarga.setText("");
+    }
+
+    private void loadData() {
+        transaksiService = new TransaksiServiceImpl();
+        List<Transaksi> listTransaksi;
+        listTransaksi = transaksiService.findAll();
+        Object[][] objectTransaksi = new Object[listTransaksi.size()][8];
+
+        int counter = 0;
+
+        for (Transaksi transaksi : listTransaksi) {
+            objectTransaksi[counter][0] = transaksi.getId();
+            objectTransaksi[counter][1] = transaksi.getPegawai().getNama();
+            objectTransaksi[counter][2] = transaksi.getMember().getNama();
+            objectTransaksi[counter][3] = transaksi.getMember().getAlamat();
+            objectTransaksi[counter][4] = transaksi.getMember().getNoHp();
+            objectTransaksi[counter][5] = transaksi.getPencucian().getJenis();
+            objectTransaksi[counter][6] = transaksi.getAdditional().getNamaAdd();
+            objectTransaksi[counter][7] = transaksi.getTotalHarga();
+            counter++;
+        }
+
+        tblTransaksi.setModel(new javax.swing.table.DefaultTableModel(
+                objectTransaksi,
+                new String[]{
+                    "ID Transaksi", "Nama Pegawai", "Nama Member", "Alamat Member", "No HP Member", "Jenis Pencucian", "Jenis Additional", "Total Harga"
+                }
+        ));
+    }
+
+    private void loadData(Transaksi transaksi) {
+        Object[][] objectTransaksi = new Object[1][8];
+
+        objectTransaksi[0][0] = transaksi.getId();
+        objectTransaksi[0][1] = transaksi.getPegawai().getNama();
+        objectTransaksi[0][2] = transaksi.getMember().getNama();
+        objectTransaksi[0][3] = transaksi.getMember().getAlamat();
+        objectTransaksi[0][4] = transaksi.getMember().getNoHp();
+        objectTransaksi[0][5] = transaksi.getPencucian().getJenis();
+        objectTransaksi[0][6] = transaksi.getAdditional().getNamaAdd();
+        objectTransaksi[0][7] = transaksi.getTotalHarga();
+
+        tblTransaksi.setModel(new javax.swing.table.DefaultTableModel(
+                objectTransaksi,
+                new String[]{
+                    "ID Transaksi", "Nama Pegawai", "Nama Member", "Alamat Member", "No HP Member", "Jenis Pencucian", "Jenis Additional", "Total Harga"
+                }
+        ));
+    }
+
+    private Transaksi findTransaksi(int id) {
+        Transaksi transaksi = new Transaksi();
+        transaksiService = new TransaksiServiceImpl();
+        transaksi = transaksiService.findById(id);
+
+        return transaksi;
     }
 
     /**
@@ -30,83 +128,588 @@ public class TransaksiManagement extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
+        tblTransaksi = new javax.swing.JTable();
+        lbl_idPegawai = new javax.swing.JLabel();
+        txtIdPegawai = new javax.swing.JTextField();
+        lbl_idMember = new javax.swing.JLabel();
+        txtIdMember = new javax.swing.JTextField();
+        lbl_Pencucian = new javax.swing.JLabel();
+        lbl_Additional = new javax.swing.JLabel();
+        CBoxPencucian = new javax.swing.JComboBox<>();
+        CBoxAdditional = new javax.swing.JComboBox<>();
+        lbl_Tanggal = new javax.swing.JLabel();
+        lbl_jenisMobil = new javax.swing.JLabel();
+        lbl_platNomor = new javax.swing.JLabel();
+        txtTanggal = new javax.swing.JTextField();
+        txtJenisMobil = new javax.swing.JTextField();
+        txtPlatNomor = new javax.swing.JTextField();
+        btnClear = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        txtSearchById = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
+        lbl_idPegawai1 = new javax.swing.JLabel();
+        txtIdTransaksi = new javax.swing.JTextField();
+        lbl_platNomor1 = new javax.swing.JLabel();
+        txtHarga = new javax.swing.JTextField();
+        jPanel2 = new javax.swing.JPanel();
+        lbl_Transaksi = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(204, 204, 255));
+        jPanel1.setBackground(new java.awt.Color(153, 204, 255));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblTransaksi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID Transaksi", "ID Pegawai", "Nama Pegawai", "ID Member", "Nama Member", "Alamat Member", "No HP Member", "Tanggal Transaksi", "Jenis Mobil", "Plat Nomor", "ID Pencucian", "Jenis Pencucian", "ID Additional", "Jenis Additional", "Total Harga"
+                "ID Transaksi", "Nama Pegawai", "Nama Member", "Alamat Member", "No HP Member", "Jenis Pencucian", "Jenis Additional", "Total Harga"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setHeaderValue("ID Transaksi");
-            jTable1.getColumnModel().getColumn(1).setHeaderValue("ID Pegawai");
-            jTable1.getColumnModel().getColumn(2).setHeaderValue("Nama Pegawai");
-            jTable1.getColumnModel().getColumn(3).setHeaderValue("ID Member");
-            jTable1.getColumnModel().getColumn(4).setHeaderValue("Nama Member");
-            jTable1.getColumnModel().getColumn(5).setHeaderValue("Alamat Member");
-            jTable1.getColumnModel().getColumn(6).setHeaderValue("No HP Member");
-            jTable1.getColumnModel().getColumn(7).setHeaderValue("Tanggal Transaksi");
-            jTable1.getColumnModel().getColumn(8).setHeaderValue("Jenis Mobil");
-            jTable1.getColumnModel().getColumn(9).setHeaderValue("Plat Nomor");
-            jTable1.getColumnModel().getColumn(10).setHeaderValue("ID Pencucian");
-            jTable1.getColumnModel().getColumn(11).setHeaderValue("Jenis Pencucian");
-            jTable1.getColumnModel().getColumn(12).setHeaderValue("ID Additional");
-            jTable1.getColumnModel().getColumn(13).setHeaderValue("Jenis Additional");
-            jTable1.getColumnModel().getColumn(14).setHeaderValue("Total Harga");
-        }
+        tblTransaksi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblTransaksiMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblTransaksi);
 
-        jTextField1.setText("jTextField1");
+        lbl_idPegawai.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lbl_idPegawai.setForeground(new java.awt.Color(0, 0, 0));
+        lbl_idPegawai.setText("ID Pegawai :");
+
+        txtIdPegawai.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        txtIdPegawai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdPegawaiActionPerformed(evt);
+            }
+        });
+
+        lbl_idMember.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lbl_idMember.setForeground(new java.awt.Color(0, 0, 0));
+        lbl_idMember.setText("ID Member :");
+
+        txtIdMember.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        txtIdMember.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdMemberActionPerformed(evt);
+            }
+        });
+
+        lbl_Pencucian.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lbl_Pencucian.setForeground(new java.awt.Color(0, 0, 0));
+        lbl_Pencucian.setText("Pencucian :");
+
+        lbl_Additional.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lbl_Additional.setForeground(new java.awt.Color(0, 0, 0));
+        lbl_Additional.setText("Additional :");
+
+        CBoxPencucian.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        CBoxPencucian.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        CBoxAdditional.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        CBoxAdditional.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        lbl_Tanggal.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lbl_Tanggal.setForeground(new java.awt.Color(0, 0, 0));
+        lbl_Tanggal.setText("Tanggal :");
+
+        lbl_jenisMobil.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lbl_jenisMobil.setForeground(new java.awt.Color(0, 0, 0));
+        lbl_jenisMobil.setText("Jenis Mobil :");
+
+        lbl_platNomor.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lbl_platNomor.setForeground(new java.awt.Color(0, 0, 0));
+        lbl_platNomor.setText("Plat Nomor :");
+
+        txtTanggal.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        txtTanggal.setText("dd-mm-yyyy");
+        txtTanggal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtTanggalMouseClicked(evt);
+            }
+        });
+        txtTanggal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTanggalActionPerformed(evt);
+            }
+        });
+
+        txtJenisMobil.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        txtJenisMobil.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtJenisMobilMouseClicked(evt);
+            }
+        });
+        txtJenisMobil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtJenisMobilActionPerformed(evt);
+            }
+        });
+
+        txtPlatNomor.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        txtPlatNomor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtPlatNomorMouseClicked(evt);
+            }
+        });
+        txtPlatNomor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPlatNomorActionPerformed(evt);
+            }
+        });
+
+        btnClear.setBackground(new java.awt.Color(204, 204, 204));
+        btnClear.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnClear.setForeground(new java.awt.Color(0, 0, 0));
+        btnClear.setText("Clear");
+        btnClear.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(204, 204, 204));
+        btnDelete.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(0, 0, 0));
+        btnDelete.setText("Delete");
+        btnDelete.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setBackground(new java.awt.Color(204, 204, 204));
+        btnUpdate.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(0, 0, 0));
+        btnUpdate.setText("Update");
+        btnUpdate.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnSave.setBackground(new java.awt.Color(204, 204, 204));
+        btnSave.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(0, 0, 0));
+        btnSave.setText("Save");
+        btnSave.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        txtSearchById.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        txtSearchById.setText("Search by ID");
+        txtSearchById.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtSearchByIdMouseClicked(evt);
+            }
+        });
+        txtSearchById.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchByIdActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setBackground(new java.awt.Color(204, 204, 204));
+        btnSearch.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnSearch.setForeground(new java.awt.Color(0, 0, 0));
+        btnSearch.setText("Search");
+        btnSearch.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
+        btnRefresh.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnRefresh.setForeground(new java.awt.Color(0, 0, 0));
+        btnRefresh.setText("Refresh");
+        btnRefresh.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+
+        lbl_idPegawai1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lbl_idPegawai1.setForeground(new java.awt.Color(0, 0, 0));
+        lbl_idPegawai1.setText("ID Transaksi :");
+
+        txtIdTransaksi.setEditable(false);
+        txtIdTransaksi.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        txtIdTransaksi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdTransaksiActionPerformed(evt);
+            }
+        });
+
+        lbl_platNomor1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        lbl_platNomor1.setForeground(new java.awt.Color(0, 0, 0));
+        lbl_platNomor1.setText("Total Harga :");
+
+        txtHarga.setEditable(false);
+        txtHarga.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        txtHarga.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtHargaMouseClicked(evt);
+            }
+        });
+        txtHarga.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtHargaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(263, 263, 263))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(lbl_idPegawai)
+                                        .addComponent(lbl_idMember))
+                                    .addGap(29, 29, 29))
+                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                    .addComponent(lbl_Additional)
+                                    .addGap(39, 39, 39)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lbl_Pencucian)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtIdPegawai)
+                            .addComponent(txtIdMember)
+                            .addComponent(CBoxPencucian, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(CBoxAdditional, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(109, 109, 109)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lbl_Tanggal)
+                                    .addComponent(lbl_jenisMobil)
+                                    .addComponent(lbl_platNomor))
+                                .addGap(64, 64, 64)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtTanggal)
+                                    .addComponent(txtJenisMobil)
+                                    .addComponent(txtPlatNomor, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lbl_platNomor1)
+                                .addGap(64, 64, 64)
+                                .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lbl_idPegawai1)
+                                .addGap(21, 21, 21)
+                                .addComponent(txtIdTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtSearchById, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(29, 29, 29)
+                                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(135, 135, 135)
+                                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 52, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbl_idPegawai1)
+                    .addComponent(txtIdTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lbl_idPegawai)
+                                    .addComponent(txtIdPegawai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lbl_Tanggal)
+                                    .addComponent(txtTanggal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(lbl_idMember)
+                                    .addComponent(txtIdMember, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lbl_jenisMobil)
+                                    .addComponent(txtJenisMobil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(CBoxPencucian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lbl_Pencucian)
+                                    .addComponent(lbl_platNomor)
+                                    .addComponent(txtPlatNomor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(122, 122, 122)
+                                .addComponent(lbl_Additional))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(119, 119, 119)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(lbl_platNomor1)
+                                        .addComponent(txtHarga, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(CBoxAdditional, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtSearchById, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+        );
+
+        jPanel2.setBackground(new java.awt.Color(130, 170, 227));
+
+        lbl_Transaksi.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
+        lbl_Transaksi.setForeground(new java.awt.Color(0, 0, 0));
+        lbl_Transaksi.setText("MANAGE TRANSAKSI");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(160, 160, 160)
+                .addComponent(lbl_Transaksi)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbl_Transaksi)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 1180, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtIdPegawaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdPegawaiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdPegawaiActionPerformed
+
+    private void txtIdMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdMemberActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdMemberActionPerformed
+
+    private void txtTanggalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtTanggalMouseClicked
+        txtTanggal.setText("");
+    }//GEN-LAST:event_txtTanggalMouseClicked
+
+    private void txtTanggalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTanggalActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTanggalActionPerformed
+
+    private void txtJenisMobilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtJenisMobilMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtJenisMobilMouseClicked
+
+    private void txtJenisMobilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtJenisMobilActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtJenisMobilActionPerformed
+
+    private void txtPlatNomorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtPlatNomorMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPlatNomorMouseClicked
+
+    private void txtPlatNomorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPlatNomorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPlatNomorActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        String jenisPencucian, namaAdditional, tanggalTransaksi, jenisMobil, platNomor;
+        int idPegawai, idMember;
+        transaksiService = new TransaksiServiceImpl();
+        pencucianService = new PencucianServiceImpl();
+        idPegawai = Integer.parseInt(txtIdPegawai.getText());
+        idMember = Integer.parseInt(txtIdMember.getText());
+        jenisPencucian = CBoxPencucian.getSelectedItem().toString();
+        namaAdditional = CBoxAdditional.getSelectedItem().toString();
+        String date = txtTanggal.getText();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        tanggalTransaksi = dateFormat.format(date);
+        jenisMobil = txtJenisMobil.getText();
+        platNomor = txtPlatNomor.getText();
+
+        Transaksi transaksi = new Transaksi();
+        Pegawai pegawai = new Pegawai();
+        Member member = new Member();
+        Pencucian pencucian = new Pencucian();
+        Additional additional = new Additional();
+        transaksi.setTanggalTransaksi(tanggalTransaksi);
+        transaksi.setJenisMobil(jenisMobil);
+        transaksi.setPlatNomor(platNomor);
+        transaksi.setTotalHarga(pencucian.getHarga() + additional.getHarga());
+        pegawai.setId(idPegawai);
+        member.setId(idMember);
+        pencucian.setJenis(jenisPencucian);
+        additional.setNamaAdd(namaAdditional);
+
+        transaksi.setPegawai(pegawai);
+        transaksi.setMember(member);
+        transaksi.setPencucian(pencucian);
+        transaksi.setAdditional(additional);
+
+        transaksiService.create(transaksi);
+        JOptionPane.showMessageDialog(null, "Data Transaksi berhasil ditambahkan ...");
+        loadData();
+        emptyField();
+
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        String jenisPencucian, namaAdditional, tanggalTransaksi, jenisMobil, platNomor;
+        int idTransaksi, idPegawai, idMember;
+        transaksiService = new TransaksiServiceImpl();
+        pencucianService = new PencucianServiceImpl();
+        idTransaksi = Integer.parseInt(txtIdTransaksi.getText());
+        idPegawai = Integer.parseInt(txtIdPegawai.getText());
+        idMember = Integer.parseInt(txtIdMember.getText());
+        jenisPencucian = CBoxPencucian.getSelectedItem().toString();
+        namaAdditional = CBoxAdditional.getSelectedItem().toString();
+        String date = txtTanggal.getText();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        tanggalTransaksi = dateFormat.format(date);
+        jenisMobil = txtJenisMobil.getText();
+        platNomor = txtPlatNomor.getText();
+
+        Transaksi transaksi = new Transaksi();
+        Pegawai pegawai = new Pegawai();
+        Member member = new Member();
+        Pencucian pencucian = new Pencucian();
+        Additional additional = new Additional();
+        transaksi.setTanggalTransaksi(tanggalTransaksi);
+        transaksi.setJenisMobil(jenisMobil);
+        transaksi.setPlatNomor(platNomor);
+        transaksi.setTotalHarga(pencucian.getHarga() + additional.getHarga());
+        pegawai.setId(idPegawai);
+        member.setId(idMember);
+        pencucian.setJenis(jenisPencucian);
+        additional.setNamaAdd(namaAdditional);
+
+        transaksi.setPegawai(pegawai);
+        transaksi.setMember(member);
+        transaksi.setPencucian(pencucian);
+        transaksi.setAdditional(additional);
+
+        transaksiService.update(transaksi);
+        JOptionPane.showMessageDialog(null, "Data Transaksi berhasil diupdate ...");
+        loadData();
+        emptyField();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int id;
+        transaksiService = new TransaksiServiceImpl();
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+
+        id = Integer.parseInt(txtIdTransaksi.getText());
+
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Yakin ingin menghapus?", "Warning", dialogButton);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            transaksiService.delete(id);
+            loadData();
+            emptyField();
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        emptyField();
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void txtSearchByIdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSearchByIdMouseClicked
+        txtSearchById.setText("");
+    }//GEN-LAST:event_txtSearchByIdMouseClicked
+
+    private void txtSearchByIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchByIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchByIdActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        int id;
+        Transaksi searchedTransaksi = new Transaksi();
+
+        id = Integer.parseInt(txtSearchById.getText());
+        searchedTransaksi = findTransaksi(id);
+        if (searchedTransaksi != null) {
+            loadData(searchedTransaksi);
+        } else {
+            JOptionPane.showMessageDialog(null, "Data Tidak Ditemukan.");
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        loadData();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void txtIdTransaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdTransaksiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdTransaksiActionPerformed
+
+    private void txtHargaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtHargaMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtHargaMouseClicked
+
+    private void txtHargaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHargaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtHargaActionPerformed
+
+    private void tblTransaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblTransaksiMouseClicked
+        String jenisPencucian, namaAdditional, tanggalTransaksi, jenisMobil, platNomor;
+        int idTransaksi, idPegawai, idMember;
+    }//GEN-LAST:event_tblTransaksiMouseClicked
 
     /**
      * @param args the command line arguments
@@ -144,9 +747,35 @@ public class TransaksiManagement extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> CBoxAdditional;
+    private javax.swing.JComboBox<String> CBoxPencucian;
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel lbl_Additional;
+    private javax.swing.JLabel lbl_Pencucian;
+    private javax.swing.JLabel lbl_Tanggal;
+    private javax.swing.JLabel lbl_Transaksi;
+    private javax.swing.JLabel lbl_idMember;
+    private javax.swing.JLabel lbl_idPegawai;
+    private javax.swing.JLabel lbl_idPegawai1;
+    private javax.swing.JLabel lbl_jenisMobil;
+    private javax.swing.JLabel lbl_platNomor;
+    private javax.swing.JLabel lbl_platNomor1;
+    private javax.swing.JTable tblTransaksi;
+    private javax.swing.JTextField txtHarga;
+    private javax.swing.JTextField txtIdMember;
+    private javax.swing.JTextField txtIdPegawai;
+    private javax.swing.JTextField txtIdTransaksi;
+    private javax.swing.JTextField txtJenisMobil;
+    private javax.swing.JTextField txtPlatNomor;
+    private javax.swing.JTextField txtSearchById;
+    private javax.swing.JTextField txtTanggal;
     // End of variables declaration//GEN-END:variables
 }
