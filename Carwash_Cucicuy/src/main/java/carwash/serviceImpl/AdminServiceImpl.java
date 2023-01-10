@@ -29,7 +29,7 @@ public class AdminServiceImpl implements AdminService {
     public Admin login(String username, String password) {
         Admin admin = null;
 
-        String sql = "SELECT id, nama, username, password "
+        String sql = "SELECT id_admin, nama_admin, username, password "
                 + "FROM admin "
                 + "WHERE username = '" + username + "' "
                 + "AND password = '" + password + "'";
@@ -43,10 +43,31 @@ public class AdminServiceImpl implements AdminService {
 
             while (rs.next()) {
                 admin = new Admin();
-                admin.setId(rs.getInt("id"));
-                admin.setNama(rs.getString("nama"));
+                admin.setId(rs.getInt("id_admin"));
+                admin.setNama(rs.getString("nama_admin"));
                 admin.setUsername(rs.getString("username"));
             }
+            conMan.disconnect();
+        } catch (SQLException e) {
+            Logger.getLogger(AdminServiceImpl.class.getName())
+                    .log(Level.SEVERE, null, e);
+        }
+        return admin;
+    }
+    
+    @Override
+    public Admin register(String nama, String username, String password){
+        Admin admin = null;
+        
+        String sql = "INSERT INTO admin(nama_admin,username,password) VALUES"
+                + "('" + nama + "','" + username + "','" + password + "')";
+        
+        conMan = new ConnectionManager();
+        conn = conMan.connect();
+        
+        try {
+            stmt = conn.createStatement();
+            stmt.executeUpdate(sql);
             conMan.disconnect();
         } catch (SQLException e) {
             Logger.getLogger(AdminServiceImpl.class.getName())

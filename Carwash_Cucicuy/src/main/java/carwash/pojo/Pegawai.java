@@ -15,7 +15,7 @@ public class Pegawai {
     private String alamat;
     private String noHp;
     private String status;
-    private int gaji;
+    private double gaji;
 
     public Pegawai() {
     }
@@ -60,11 +60,11 @@ public class Pegawai {
         this.status = status;
     }
 
-    public int getGaji() {
+    public double getGaji() {
         return gaji;
     }
 
-    public void setGaji(int gaji) {
+    public void setGaji(double gaji) {
         this.gaji = gaji;
     }
 

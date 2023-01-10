@@ -41,9 +41,9 @@ public class AdditionalServiceImpl implements AdditionalService {
 
             while (rs.next()) {
                 Additional additional = new Additional();
-                additional.setId(rs.getInt("id"));
+                additional.setId(rs.getInt("id_additional"));
                 additional.setNamaAdd(rs.getString("namaAdd"));
-                additional.setHarga(rs.getInt("harga"));
+                additional.setHarga(rs.getDouble("harga_additional"));
 
                 listAdditional.add(additional);
             }
@@ -59,7 +59,7 @@ public class AdditionalServiceImpl implements AdditionalService {
     @Override
     public Integer create(Additional object) {
         int result = 0;
-        String sql = "INSERT INTO additional VALUES"
+        String sql = "INSERT INTO additional(namaAdd, harga_additional) VALUES"
                 + "('" + object.getNamaAdd() + "', "
                 + "" + object.getHarga() + ")";
 
@@ -81,8 +81,8 @@ public class AdditionalServiceImpl implements AdditionalService {
     public Integer update(Additional object) {
         int result = 0;
         String sql = "UPDATE additional SET namaAdd ='" + object.getNamaAdd() + "', "
-                + "harga=" + object.getHarga() + ""
-                + "WHERE id=" + object.getId() + "";
+                + "harga_additional=" + object.getHarga() + ""
+                + "WHERE id_additional=" + object.getId() + "";
 
         conMan = new ConnectionManager();
         conn = conMan.connect();
@@ -101,7 +101,7 @@ public class AdditionalServiceImpl implements AdditionalService {
     @Override
     public Additional findById(int id) {
         Additional additional = null;
-        String sql = "SELECT * FROM additional WHERE id=" + id + "";
+        String sql = "SELECT * FROM additional WHERE id_additional=" + id + "";
 
         conMan = new ConnectionManager();
         conn = conMan.connect();
@@ -112,9 +112,9 @@ public class AdditionalServiceImpl implements AdditionalService {
 
             while (rs.next()) {
                 additional = new Additional();
-                additional.setId(rs.getInt("id"));
+                additional.setId(rs.getInt("id_additional"));
                 additional.setNamaAdd(rs.getString("namaAdd"));
-                additional.setHarga(rs.getInt("harga"));
+                additional.setHarga(rs.getDouble("harga_additional"));
 
             }
             conMan.disconnect();
@@ -128,7 +128,7 @@ public class AdditionalServiceImpl implements AdditionalService {
     @Override
     public Integer delete(int id) {
         int result = 0;
-        String sql = "DELETE FROM additional WHERE id=" + id + "";
+        String sql = "DELETE FROM additional WHERE id_additional=" + id + "";
 
         conMan = new ConnectionManager();
         conn = conMan.connect();

@@ -56,7 +56,7 @@ public class Admin {
     }
 
     public void setLoginStatus(boolean loginStatus) {
-        this.loginStatus = loginStatus;
+        this.loginStatus = false;
     }
 
 }

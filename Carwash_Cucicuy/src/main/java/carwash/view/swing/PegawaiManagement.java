@@ -4,6 +4,12 @@
  */
 package carwash.view.swing;
 
+import carwash.pojo.Admin;
+import static carwash.view.swing.Dashboard.admin;
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ASUS
@@ -15,6 +21,22 @@ public class PegawaiManagement extends javax.swing.JFrame {
      */
     public PegawaiManagement() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        checkStatus();
+    }
+    
+    public void close() {
+        WindowEvent we = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(we);
+    }
+    
+    public void checkStatus() {
+        admin = new Admin();
+        if (admin.isLoginStatus() == false) {
+            JOptionPane.showMessageDialog(null, "Anda Harus Login Terlebih Dahulu!");
+            close();
+            new LoginForm().setVisible(true);
+        }
     }
 
     /**
@@ -51,7 +73,7 @@ public class PegawaiManagement extends javax.swing.JFrame {
         btnClear = new javax.swing.JButton();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        backToMenuButton = new javax.swing.JMenuItem();
 
         jLabel4.setText("jLabel4");
 
@@ -70,7 +92,8 @@ public class PegawaiManagement extends javax.swing.JFrame {
 
         jMenuItem1.setText("jMenuItem1");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("PegawaiManagement");
 
         jPanel1.setBackground(new java.awt.Color(130, 170, 227));
 
@@ -274,10 +297,16 @@ public class PegawaiManagement extends javax.swing.JFrame {
         );
 
         jMenu1.setText("File");
-        jMenuBar2.add(jMenu1);
 
-        jMenu2.setText("Edit");
-        jMenuBar2.add(jMenu2);
+        backToMenuButton.setText("Back to Dashboard");
+        backToMenuButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backToMenuButtonActionPerformed(evt);
+            }
+        });
+        jMenu1.add(backToMenuButton);
+
+        jMenuBar2.add(jMenu1);
 
         setJMenuBar(jMenuBar2);
 
@@ -337,6 +366,17 @@ public class PegawaiManagement extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tblPegawaiMouseClicked
 
+    private void backToMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToMenuButtonActionPerformed
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+        
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Yakin Kembali Ke Dashboard?", "Pesan", dialogButton);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            Dashboard dashboard = new Dashboard();
+            dashboard.setVisible(true);
+            close();
+        }
+    }//GEN-LAST:event_backToMenuButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -373,6 +413,7 @@ public class PegawaiManagement extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem backToMenuButton;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSave;
@@ -385,7 +426,6 @@ public class PegawaiManagement extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;

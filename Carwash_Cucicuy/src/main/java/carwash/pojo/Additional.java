@@ -12,7 +12,7 @@ public class Additional {
 
     private int id;
     private String namaAdd;
-    private int harga;
+    private double harga;
 
     public Additional() {
     }
@@ -33,11 +33,11 @@ public class Additional {
         this.namaAdd = namaAdd;
     }
 
-    public int getHarga() {
+    public double getHarga() {
         return harga;
     }
 
-    public void setHarga(int harga) {
+    public void setHarga(double harga) {
         this.harga = harga;
     }
 

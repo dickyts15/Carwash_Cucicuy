@@ -41,12 +41,12 @@ public class PegawaiServiceImpl implements PegawaiService {
 
             while (rs.next()) {
                 Pegawai pegawai = new Pegawai();
-                pegawai.setId(rs.getInt("id"));
-                pegawai.setNama(rs.getString("nama"));
+                pegawai.setId(rs.getInt("id_pegawai"));
+                pegawai.setNama(rs.getString("nama_pegawai"));
                 pegawai.setAlamat(rs.getString("alamat"));
                 pegawai.setNoHp(rs.getString("noHp"));
                 pegawai.setStatus(rs.getString("status"));
-                pegawai.setGaji(rs.getInt("gaji"));
+                pegawai.setGaji(rs.getDouble("gaji"));
 
                 listPegawai.add(pegawai);
             }
@@ -62,7 +62,7 @@ public class PegawaiServiceImpl implements PegawaiService {
     @Override
     public Integer create(Pegawai object) {
         int result = 0;
-        String sql = "INSERT INTO pegawai VALUES"
+        String sql = "INSERT INTO pegawai(nama_pegawai,alamat,noHp,status,gaji) VALUES"
                 + "('" + object.getNama() + "', "
                 + "'" + object.getAlamat() + "', "
                 + "'" + object.getNoHp() + "', "
@@ -86,12 +86,12 @@ public class PegawaiServiceImpl implements PegawaiService {
     @Override
     public Integer update(Pegawai object) {
         int result = 0;
-        String sql = "UPDATE pegawai SET nama ='" + object.getNama() + "', "
+        String sql = "UPDATE pegawai SET nama_pegawai='" + object.getNama() + "', "
                 + "alamat='" + object.getAlamat() + "', "
                 + "noHp='" + object.getNoHp() + "', "
                 + "status='" + object.getStatus() + "', "
                 + "gaji=" + object.getGaji() + ""
-                + "WHERE id=" + object.getId() + "";
+                + "WHERE id_pegawai=" + object.getId() + "";
 
         conMan = new ConnectionManager();
         conn = conMan.connect();
@@ -110,7 +110,7 @@ public class PegawaiServiceImpl implements PegawaiService {
     @Override
     public Pegawai findById(int id) {
         Pegawai pegawai = null;
-        String sql = "SELECT * FROM pegawai WHERE id=" + id + "";
+        String sql = "SELECT * FROM pegawai WHERE id_pegawai=" + id + "";
 
         conMan = new ConnectionManager();
         conn = conMan.connect();
@@ -121,12 +121,12 @@ public class PegawaiServiceImpl implements PegawaiService {
 
             while (rs.next()) {
                 pegawai = new Pegawai();
-                pegawai.setId(rs.getInt("id"));
-                pegawai.setNama(rs.getString("nama"));
+                pegawai.setId(rs.getInt("id_pegawai"));
+                pegawai.setNama(rs.getString("nama_pegawai"));
                 pegawai.setAlamat(rs.getString("alamat"));
                 pegawai.setNoHp(rs.getString("noHp"));
                 pegawai.setStatus(rs.getString("status"));
-                pegawai.setGaji(rs.getInt("gaji"));
+                pegawai.setGaji(rs.getDouble("gaji"));
             }
             conMan.disconnect();
         } catch (SQLException e) {
@@ -139,7 +139,7 @@ public class PegawaiServiceImpl implements PegawaiService {
     @Override
     public Integer delete(int id) {
         int result = 0;
-        String sql = "DELETE FROM pegawai WHERE id=" + id + "";
+        String sql = "DELETE FROM pegawai WHERE id_pegawai=" + id + "";
 
         conMan = new ConnectionManager();
         conn = conMan.connect();

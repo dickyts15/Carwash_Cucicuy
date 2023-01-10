@@ -18,7 +18,7 @@ public class Transaksi {
     private String platNomor;
     private Pencucian pencucian;
     private Additional additional;
-    private int totalHarga;
+    private double totalHarga;
 
     public Transaksi() {
     }
@@ -87,11 +87,11 @@ public class Transaksi {
         this.additional = additional;
     }
 
-    public int getTotalHarga() {
+    public double getTotalHarga() {
         return totalHarga;
     }
 
-    public void setTotalHarga(int totalHarga) {
+    public void setTotalHarga(double totalHarga) {
         this.totalHarga = totalHarga;
     }
 

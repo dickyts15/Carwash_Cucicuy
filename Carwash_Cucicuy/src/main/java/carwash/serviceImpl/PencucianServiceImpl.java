@@ -41,9 +41,9 @@ public class PencucianServiceImpl implements PencucianService {
 
             while (rs.next()) {
                 Pencucian pencucian = new Pencucian();
-                pencucian.setId(rs.getInt("id"));
+                pencucian.setId(rs.getInt("id_pencucian"));
                 pencucian.setJenis(rs.getString("jenis"));
-                pencucian.setHarga(rs.getInt("harga"));
+                pencucian.setHarga(rs.getDouble("harga_pencucian"));
 
                 listPencucian.add(pencucian);
             }
@@ -59,7 +59,7 @@ public class PencucianServiceImpl implements PencucianService {
     @Override
     public Integer create(Pencucian object) {
         int result = 0;
-        String sql = "INSERT INTO pencucian VALUES"
+        String sql = "INSERT INTO pencucian(jenis,harga_pencucian) VALUES"
                 + "('" + object.getJenis() + "', "
                 + "" + object.getHarga() + ")";
 
@@ -81,8 +81,8 @@ public class PencucianServiceImpl implements PencucianService {
     public Integer update(Pencucian object) {
         int result = 0;
         String sql = "UPDATE pencucian SET jenis ='" + object.getJenis() + "', "
-                + "harga=" + object.getHarga() + ""
-                + "WHERE id=" + object.getId() + "";
+                + "harga_pencucian=" + object.getHarga() + ""
+                + "WHERE id_pencucian=" + object.getId() + "";
 
         conMan = new ConnectionManager();
         conn = conMan.connect();
@@ -101,7 +101,7 @@ public class PencucianServiceImpl implements PencucianService {
     @Override
     public Pencucian findById(int id) {
         Pencucian pencucian = null;
-        String sql = "SELECT * FROM pencucian WHERE id=" + id + "";
+        String sql = "SELECT * FROM pencucian WHERE id_pencucian=" + id + "";
 
         conMan = new ConnectionManager();
         conn = conMan.connect();
@@ -112,9 +112,9 @@ public class PencucianServiceImpl implements PencucianService {
 
             while (rs.next()) {
                 pencucian = new Pencucian();
-                pencucian.setId(rs.getInt("id"));
+                pencucian.setId(rs.getInt("id_pencucian"));
                 pencucian.setJenis(rs.getString("jenis"));
-                pencucian.setHarga(rs.getInt("harga"));
+                pencucian.setHarga(rs.getDouble("harga_pencucian"));
 
             }
             conMan.disconnect();
@@ -128,7 +128,7 @@ public class PencucianServiceImpl implements PencucianService {
     @Override
     public Integer delete(int id) {
         int result = 0;
-        String sql = "DELETE FROM pencucian WHERE id=" + id + "";
+        String sql = "DELETE FROM pencucian WHERE id_pencucian=" + id + "";
 
         conMan = new ConnectionManager();
         conn = conMan.connect();

@@ -4,6 +4,12 @@
  */
 package carwash.view.swing;
 
+import carwash.pojo.Admin;
+import static carwash.view.swing.Dashboard.admin;
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ASUS
@@ -15,6 +21,22 @@ public class PencucianManagement extends javax.swing.JFrame {
      */
     public PencucianManagement() {
         initComponents();
+        this.setLocationRelativeTo(null);
+        checkStatus();
+    }
+    
+    public void close() {
+        WindowEvent we = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(we);
+    }
+    
+    public void checkStatus() {
+        admin = new Admin();
+        if (admin.isLoginStatus() == false) {
+            JOptionPane.showMessageDialog(null, "Anda Harus Login Terlebih Dahulu!");
+            close();
+            new LoginForm().setVisible(true);
+        }
     }
 
     /**
@@ -26,7 +48,26 @@ public class PencucianManagement extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        backToMenuButton = new javax.swing.JMenuItem();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("PencucianManagement");
+
+        jMenu1.setText("File");
+
+        backToMenuButton.setText("Back to Dashboard");
+        backToMenuButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backToMenuButtonActionPerformed(evt);
+            }
+        });
+        jMenu1.add(backToMenuButton);
+
+        jMenuBar1.add(jMenu1);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -36,11 +77,22 @@ public class PencucianManagement extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 279, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void backToMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToMenuButtonActionPerformed
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Yakin Kembali Ke Dashboard?", "Pesan", dialogButton);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            Dashboard dashboard = new Dashboard();
+            dashboard.setVisible(true);
+            close();
+        }
+    }//GEN-LAST:event_backToMenuButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -78,5 +130,8 @@ public class PencucianManagement extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem backToMenuButton;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar jMenuBar1;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,11 +4,28 @@
  */
 package carwash.view.swing;
 
+import carwash.pojo.Admin;
+import carwash.pojo.Member;
+import carwash.service.MemberService;
+import carwash.serviceImpl.MemberServiceImpl;
+import static carwash.view.swing.Dashboard.admin;
+import java.awt.Toolkit;
+import java.awt.event.WindowEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ASUS
  */
 public class MemberManagement extends javax.swing.JFrame {
+
+    MemberService memberService;
 
     /**
      * Creates new form MemberManagement
@@ -16,6 +33,81 @@ public class MemberManagement extends javax.swing.JFrame {
     public MemberManagement() {
         initComponents();
         this.setLocationRelativeTo(null);
+        checkStatus();
+        loadData();
+    }
+
+    public void close() {
+        WindowEvent we = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(we);
+    }
+    
+    public void checkStatus() {
+        admin = new Admin();
+        if (admin.isLoginStatus() == false) {
+            JOptionPane.showMessageDialog(null, "Anda Harus Login Terlebih Dahulu!");
+            close();
+            new LoginForm().setVisible(true);
+        }
+    }
+
+    private void emptyField() {
+        txtIdMember.setText("");
+        txtNama.setText("");
+        txtAlamat.setText("");
+        txtNoHp.setText("");
+        tanggalDaftarChooser.setCalendar(null);
+        masaAktifChooser.setCalendar(null);
+    }
+
+    private void loadData() {
+        memberService = new MemberServiceImpl();
+        List<Member> listMember;
+        listMember = memberService.findAll();
+        Object[][] objectMember = new Object[listMember.size()][6];
+
+        int counter = 0;
+
+        for (Member member : listMember) {
+            objectMember[counter][0] = member.getId();
+            objectMember[counter][1] = member.getNama() + "";
+            objectMember[counter][2] = member.getAlamat() + "";
+            objectMember[counter][3] = member.getNoHp() + "";
+            objectMember[counter][4] = member.getTanggalDaftar() + "";
+            objectMember[counter][5] = member.getMasaAktif() + "";
+            counter++;
+        }
+
+        tblMember.setModel(new javax.swing.table.DefaultTableModel(
+                objectMember,
+                new String[]{
+                    "ID Member", "Nama Member", "Alamat", "No HP", "Tanggal Pendaftaran", "Masa Aktif"
+                }));
+    }
+
+    private void loadData(Member member) {
+        Object[][] objectMember = new Object[1][6];
+
+        objectMember[0][0] = member.getId();
+        objectMember[0][1] = member.getNama() + "";
+        objectMember[0][2] = member.getAlamat() + "";
+        objectMember[0][3] = member.getNoHp() + "";
+        objectMember[0][4] = member.getTanggalDaftar() + "";
+        objectMember[0][5] = member.getMasaAktif() + "";
+
+        tblMember.setModel(new javax.swing.table.DefaultTableModel(
+                objectMember,
+                new String[]{
+                    "ID Member", "Nama Member", "Alamat", "No HP", "Tanggal Pendaftaran", "Masa Aktif"
+                }));
+    }
+
+    private Member findMember(int id) {
+        Member member = new Member();
+        memberService = new MemberServiceImpl();
+        member = memberService.findById(id);
+
+        return member;
     }
 
     /**
@@ -27,72 +119,87 @@ public class MemberManagement extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        lbl_Member = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        lblID = new javax.swing.JTextField();
+        txtIdMember = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        lblNama = new javax.swing.JTextField();
+        txtNama = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        lblAlamat = new javax.swing.JTextField();
+        txtAlamat = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        lblNohp = new javax.swing.JTextField();
-        lbltgldftr = new javax.swing.JTextField();
-        lblmasaaktif = new javax.swing.JTextField();
+        txtNoHp = new javax.swing.JTextField();
         btnSave = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblMember = new javax.swing.JTable();
+        txtSearchById = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
+        masaAktifChooser = new com.toedter.calendar.JDateChooser();
+        tanggalDaftarChooser = new com.toedter.calendar.JDateChooser();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        backToMenuButton = new javax.swing.JMenuItem();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("MemberManagement");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jPanel2.setBackground(new java.awt.Color(130, 170, 227));
+
+        lbl_Member.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
+        lbl_Member.setForeground(new java.awt.Color(0, 0, 0));
+        lbl_Member.setText("MANAGE MEMBER");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbl_Member)
+                .addGap(179, 179, 179))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbl_Member)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         jPanel1.setBackground(new java.awt.Color(130, 170, 227));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText("ID Member : ");
 
-        lblID.addActionListener(new java.awt.event.ActionListener() {
+        txtIdMember.setEditable(false);
+        txtIdMember.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lblIDActionPerformed(evt);
+                txtIdMemberActionPerformed(evt);
             }
         });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel2.setText("Nama        :");
+        jLabel2.setText("Nama         :");
 
-        lblNama.addActionListener(new java.awt.event.ActionListener() {
+        txtNama.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lblNamaActionPerformed(evt);
+                txtNamaActionPerformed(evt);
             }
         });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel3.setText("Alamat      : ");
+        jLabel3.setText("Alamat       : ");
 
-        lblAlamat.addActionListener(new java.awt.event.ActionListener() {
+        txtAlamat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lblAlamatActionPerformed(evt);
+                txtAlamatActionPerformed(evt);
             }
         });
 
@@ -103,28 +210,17 @@ public class MemberManagement extends javax.swing.JFrame {
         jLabel5.setText("Tanggal Daftar :");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel6.setText("Masa Aktif      :");
+        jLabel6.setText("Masa Aktif       :");
 
-        lblNohp.addActionListener(new java.awt.event.ActionListener() {
+        txtNoHp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lblNohpActionPerformed(evt);
-            }
-        });
-
-        lbltgldftr.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lbltgldftrActionPerformed(evt);
-            }
-        });
-
-        lblmasaaktif.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                lblmasaaktifActionPerformed(evt);
+                txtNoHpActionPerformed(evt);
             }
         });
 
         btnSave.setBackground(new java.awt.Color(204, 204, 204));
-        btnSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/carwash/images/save.png"))); // NOI18N
+        btnSave.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(0, 0, 0));
         btnSave.setText("Save");
         btnSave.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -134,7 +230,8 @@ public class MemberManagement extends javax.swing.JFrame {
         });
 
         btnUpdate.setBackground(new java.awt.Color(204, 204, 204));
-        btnUpdate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/carwash/images/update.png"))); // NOI18N
+        btnUpdate.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(0, 0, 0));
         btnUpdate.setText("Update");
         btnUpdate.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -144,7 +241,8 @@ public class MemberManagement extends javax.swing.JFrame {
         });
 
         btnDelete.setBackground(new java.awt.Color(204, 204, 204));
-        btnDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/carwash/images/delete-file.png"))); // NOI18N
+        btnDelete.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(0, 0, 0));
         btnDelete.setText("Delete");
         btnDelete.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -154,7 +252,8 @@ public class MemberManagement extends javax.swing.JFrame {
         });
 
         btnClear.setBackground(new java.awt.Color(204, 204, 204));
-        btnClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/carwash/images/broom.png"))); // NOI18N
+        btnClear.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnClear.setForeground(new java.awt.Color(0, 0, 0));
         btnClear.setText("Clear");
         btnClear.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnClear.addActionListener(new java.awt.event.ActionListener() {
@@ -163,8 +262,9 @@ public class MemberManagement extends javax.swing.JFrame {
             }
         });
 
+        tblMember.setAutoCreateRowSorter(true);
         tblMember.setBackground(new java.awt.Color(204, 204, 204));
-        tblMember.setFont(new java.awt.Font("Rockwell", 0, 12)); // NOI18N
+        tblMember.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         tblMember.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -174,104 +274,174 @@ public class MemberManagement extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "ID Member", "Nama", "Alamat", "No Hp", "Tanggal Daftar", "Masa Aktif"
+                "ID Member", "Nama Member", "Alamat", "No Hp", "Tanggal Pendaftaran", "Masa Aktif"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblMember.setGridColor(new java.awt.Color(0, 0, 0));
         tblMember.setShowGrid(true);
+        tblMember.getTableHeader().setReorderingAllowed(false);
         tblMember.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblMemberMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(tblMember);
+        if (tblMember.getColumnModel().getColumnCount() > 0) {
+            tblMember.getColumnModel().getColumn(1).setResizable(false);
+            tblMember.getColumnModel().getColumn(3).setResizable(false);
+        }
+
+        txtSearchById.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        txtSearchById.setText("Search by ID");
+        txtSearchById.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtSearchByIdMouseClicked(evt);
+            }
+        });
+        txtSearchById.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchByIdActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setBackground(new java.awt.Color(204, 204, 204));
+        btnSearch.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnSearch.setForeground(new java.awt.Color(0, 0, 0));
+        btnSearch.setText("Search");
+        btnSearch.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
+        btnRefresh.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnRefresh.setForeground(new java.awt.Color(0, 0, 0));
+        btnRefresh.setText("Refresh");
+        btnRefresh.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+
+        masaAktifChooser.setDateFormatString("y-MM-dd");
+
+        tanggalDaftarChooser.setDateFormatString("y-MM-dd");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
+                        .addComponent(txtSearchById, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtIdMember, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(txtNoHp, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(5, 5, 5))
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel1))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(lblAlamat, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                                .addComponent(lblID))
-                            .addComponent(lblNama, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21)))
-                .addGap(52, 52, 52)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(61, 61, 61))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addComponent(lblNohp, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel6)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblmasaaktif, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel5)
-                            .addGap(18, 18, 18)
-                            .addComponent(lbltgldftr, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 677, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtNama, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                    .addComponent(txtAlamat, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE))))
+                        .addGap(101, 101, 101)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(tanggalDaftarChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(masaAktifChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel4))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(lblNohp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(lblID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(15, 15, 15)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(txtIdMember, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4)
+                        .addComponent(txtNoHp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(lblNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
-                    .addComponent(lbltgldftr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(lblAlamat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(lblmasaaktif, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                    .addComponent(tanggalDaftarChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(masaAktifChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(txtAlamat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6)))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(56, 56, 56)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearchById, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        backToMenuButton.setText("Back to Dashboard");
+        backToMenuButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backToMenuButtonActionPerformed(evt);
+            }
+        });
+        jMenu1.add(backToMenuButton);
+
+        jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
 
@@ -280,58 +450,199 @@ public class MemberManagement extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void lblNohpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lblNohpActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lblNohpActionPerformed
+    private void backToMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToMenuButtonActionPerformed
+        int dialogButton = JOptionPane.YES_NO_OPTION;
 
-    private void lblIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lblIDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lblIDActionPerformed
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Yakin Kembali Ke Dashboard?", "Pesan", dialogButton);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            Dashboard dashboard = new Dashboard();
+            dashboard.setVisible(true);
+            close();
+        }
+    }//GEN-LAST:event_backToMenuButtonActionPerformed
 
-    private void lblNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lblNamaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lblNamaActionPerformed
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        loadData();
+    }//GEN-LAST:event_btnRefreshActionPerformed
 
-    private void lblAlamatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lblAlamatActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lblAlamatActionPerformed
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        int id;
+        Member searchedMember = new Member();
 
-    private void lbltgldftrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lbltgldftrActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lbltgldftrActionPerformed
+        id = Integer.parseInt(txtSearchById.getText());
+        searchedMember = findMember(id);
+        if (searchedMember != null) {
+            loadData(searchedMember);
+        } else {
+            JOptionPane.showMessageDialog(null, "Data Tidak Ditemukan.");
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void lblmasaaktifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lblmasaaktifActionPerformed
+    private void txtSearchByIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchByIdActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_lblmasaaktifActionPerformed
+    }//GEN-LAST:event_txtSearchByIdActionPerformed
 
-    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSaveActionPerformed
-
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnUpdateActionPerformed
-
-    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnDeleteActionPerformed
-
-    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnClearActionPerformed
+    private void txtSearchByIdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSearchByIdMouseClicked
+        txtSearchById.setText("");
+    }//GEN-LAST:event_txtSearchByIdMouseClicked
 
     private void tblMemberMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMemberMouseClicked
-        // TODO add your handling code here:
+        Member member = null;
+
+        String nama, alamat, noHp, tanggalDaftar, masaAktif;
+        int id;
+        Date date1 = null, date2 = null;
+
+        int row = tblMember.getSelectedRow();
+        txtNama.setEditable(true);
+        txtAlamat.setEditable(true);
+        txtNoHp.setEditable(true);
+        tanggalDaftarChooser.setEnabled(true);
+        masaAktifChooser.setEnabled(true);
+        btnSave.setEnabled(true);
+        btnUpdate.setEnabled(true);
+        btnDelete.setEnabled(true);
+        id = Integer.parseInt(tblMember.getValueAt(row, 0).toString());
+        nama = tblMember.getValueAt(row, 1).toString();
+        alamat = tblMember.getValueAt(row, 2).toString();
+        noHp = tblMember.getValueAt(row, 3).toString();
+        tanggalDaftar = tblMember.getValueAt(row, 4).toString();
+        masaAktif = tblMember.getValueAt(row, 5).toString();
+        if (tanggalDaftar != null && masaAktif != null) {
+            try {
+                date1 = new SimpleDateFormat("y-MM-dd").parse(tanggalDaftar);
+                date2 = new SimpleDateFormat("y-MM-dd").parse(masaAktif);
+            } catch (ParseException e) {
+                Logger.getLogger(MemberManagement.class.getName())
+                        .log(Level.SEVERE, null, e);
+            }
+        }
+
+        txtIdMember.setText(id + "");
+        txtNama.setText(nama);
+        txtAlamat.setText(alamat);
+        txtNoHp.setText(noHp);
+        tanggalDaftarChooser.setDate(date1);
+        masaAktifChooser.setDate(date2);
+
+        if (id == 0) {
+            txtNama.setEditable(false);
+            txtAlamat.setEditable(false);
+            txtNoHp.setEditable(false);
+            tanggalDaftarChooser.setEnabled(false);
+            masaAktifChooser.setEnabled(false);
+            btnSave.setEnabled(false);
+            btnUpdate.setEnabled(false);
+            btnDelete.setEnabled(false);
+            JOptionPane.showMessageDialog(null, "Anda Tidak dapat Mengedit Data ini!");
+        }
+
     }//GEN-LAST:event_tblMemberMouseClicked
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        emptyField();
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int id;
+        memberService = new MemberServiceImpl();
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+
+        id = Integer.parseInt(txtIdMember.getText());
+
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Yakin ingin menghapus?", "Warning", dialogButton);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            memberService.delete(id);
+            loadData();
+            emptyField();
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        String nama, alamat, noHp, tanggalDaftar, masaAktif;
+        int id;
+
+        memberService = new MemberServiceImpl();
+
+        id = Integer.parseInt(txtIdMember.getText().toString());
+        nama = txtNama.getText();
+        alamat = txtAlamat.getText();
+        noHp = txtNoHp.getText();
+        Date date1 = tanggalDaftarChooser.getDate();
+        Date date2 = masaAktifChooser.getDate();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        tanggalDaftar = dateFormat.format(date1);
+        masaAktif = dateFormat.format(date2);
+
+        Member member = new Member();
+        member.setId(id);
+        member.setNama(nama);
+        member.setAlamat(alamat);
+        member.setNoHp(noHp);
+        member.setTanggalDaftar(tanggalDaftar);
+        member.setMasaAktif(masaAktif);
+
+        memberService.update(member);
+        JOptionPane.showMessageDialog(null, "Data Member berhasil diupdate ...");
+        loadData();
+        emptyField();
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        String nama, alamat, noHp, tanggalDaftar, masaAktif;
+
+        memberService = new MemberServiceImpl();
+
+        nama = txtNama.getText();
+        alamat = txtAlamat.getText();
+        noHp = txtNoHp.getText();
+        Date date1 = tanggalDaftarChooser.getDate();
+        Date date2 = masaAktifChooser.getDate();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        tanggalDaftar = dateFormat.format(date1);
+        masaAktif = dateFormat.format(date2);
+
+        Member member = new Member();
+        member.setNama(nama);
+        member.setAlamat(alamat);
+        member.setNoHp(noHp);
+        member.setTanggalDaftar(tanggalDaftar);
+        member.setMasaAktif(masaAktif);
+
+        memberService.create(member);
+        JOptionPane.showMessageDialog(null, "Data Member berhasil ditambahkan ...");
+        loadData();
+        emptyField();
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void txtNoHpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoHpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNoHpActionPerformed
+
+    private void txtAlamatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlamatActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAlamatActionPerformed
+
+    private void txtNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNamaActionPerformed
+
+    private void txtIdMemberActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdMemberActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdMemberActionPerformed
 
     /**
      * @param args the command line arguments
@@ -369,9 +680,12 @@ public class MemberManagement extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem backToMenuButton;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -380,18 +694,18 @@ public class MemberManagement extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField lblAlamat;
-    private javax.swing.JTextField lblID;
-    private javax.swing.JTextField lblNama;
-    private javax.swing.JTextField lblNohp;
-    private javax.swing.JTextField lblmasaaktif;
-    private javax.swing.JTextField lbltgldftr;
+    private javax.swing.JLabel lbl_Member;
+    private com.toedter.calendar.JDateChooser masaAktifChooser;
+    private com.toedter.calendar.JDateChooser tanggalDaftarChooser;
     private javax.swing.JTable tblMember;
+    private javax.swing.JTextField txtAlamat;
+    private javax.swing.JTextField txtIdMember;
+    private javax.swing.JTextField txtNama;
+    private javax.swing.JTextField txtNoHp;
+    private javax.swing.JTextField txtSearchById;
     // End of variables declaration//GEN-END:variables
 }

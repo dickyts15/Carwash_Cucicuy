@@ -12,7 +12,7 @@ public class Pencucian {
 
     private int id;
     private String jenis;
-    private int harga;
+    private double harga;
 
     public Pencucian() {
     }
@@ -33,11 +33,11 @@ public class Pencucian {
         this.jenis = jenis;
     }
 
-    public int getHarga() {
+    public double getHarga() {
         return harga;
     }
 
-    public void setHarga(int harga) {
+    public void setHarga(double harga) {
         this.harga = harga;
     }
 

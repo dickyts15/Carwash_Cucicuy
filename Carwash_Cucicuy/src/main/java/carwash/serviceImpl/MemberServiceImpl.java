@@ -40,11 +40,11 @@ public class MemberServiceImpl implements MemberService{
             
             while (rs.next()) {
                 Member member = new Member();
-                member.setId(rs.getInt("id"));
-                member.setNama(rs.getString("nama"));
+                member.setId(rs.getInt("id_member"));
+                member.setNama(rs.getString("nama_member"));
                 member.setAlamat(rs.getString("alamat"));
                 member.setNoHp(rs.getString("noHp"));
-                member.setTanggalDaftar(rs.getString("tanggal_daftar"));
+                member.setTanggalDaftar(rs.getString("tanggal_pendaftaran"));
                 member.setMasaAktif(rs.getString("masa_aktif"));
                 
                 listMember.add(member);
@@ -61,7 +61,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public Integer create(Member object) {
         int result = 0;
-        String sql = "INSERT INTO member VALUES"
+        String sql = "INSERT INTO member(nama_member,alamat,noHp,tanggal_pendaftaran,masa_aktif) VALUES"
                 + "('" + object.getNama() + "', "
                 + "'" + object.getAlamat() + "', "
                 + "'" + object.getNoHp() + "', "
@@ -85,12 +85,12 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public Integer update(Member object) {
         int result = 0;
-        String sql = "UPDATE member SET nama ='" + object.getNama() + "', "
+        String sql = "UPDATE member SET nama_member ='" + object.getNama() + "', "
                 + "alamat='" + object.getAlamat() + "', "
                 + "noHp='" + object.getNoHp()+ "', "
-                + "tanggal_daftar='" + object.getTanggalDaftar()+ "', "
+                + "tanggal_pendaftaran='" + object.getTanggalDaftar()+ "', "
                 + "masa_aktif='" + object.getMasaAktif()+ "'"
-                + "WHERE id=" + object.getId() + "";
+                + "WHERE id_member=" + object.getId() + "";
         
         conMan = new ConnectionManager();
         conn = conMan.connect();
@@ -109,7 +109,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public Member findById(int id) {
         Member member = null;
-        String sql = "SELECT * FROM member WHERE id=" + id + "";
+        String sql = "SELECT * FROM member WHERE id_member=" + id + "";
         
         conMan = new ConnectionManager();
         conn = conMan.connect();
@@ -120,11 +120,11 @@ public class MemberServiceImpl implements MemberService{
             
             while (rs.next()) {
                 member = new Member();
-                member.setId(rs.getInt("id"));
-                member.setNama(rs.getString("nama"));
+                member.setId(rs.getInt("id_member"));
+                member.setNama(rs.getString("nama_member"));
                 member.setAlamat(rs.getString("alamat"));
                 member.setNoHp(rs.getString("noHp"));
-                member.setTanggalDaftar(rs.getString("tanggal_daftar"));
+                member.setTanggalDaftar(rs.getString("tanggal_pendaftaran"));
                 member.setMasaAktif(rs.getString("masa_aktif"));
             }
             conMan.disconnect();
@@ -138,7 +138,7 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public Integer delete(int id) {
         int result = 0;
-        String sql = "DELETE FROM member WHERE id=" + id + "";
+        String sql = "DELETE FROM member WHERE id_member=" + id + "";
         
         conMan = new ConnectionManager();
         conn = conMan.connect();

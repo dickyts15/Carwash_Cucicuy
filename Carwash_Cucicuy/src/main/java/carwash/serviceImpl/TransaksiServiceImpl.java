@@ -40,12 +40,12 @@ public class TransaksiServiceImpl implements TransaksiService {
         Pencucian pencucian = null;
         Additional additional = null;
 
-        String sql = "SELECT t.id_transaksi,peg.id,peg.nama,mem.id,mem.nama,mem.alamat,mem.noHp,"
-                + "t.tanggal_transaksi,t.jenis_mobil,t.plat_nomor,pen.id,pen.jenis,add.id,add.namaAdd,"
+        String sql = "SELECT t.id_transaksi,peg.id_pegawai,peg.nama_pegawai,mem.id_member,mem.nama_member,"
+                + "t.tanggal_transaksi,pen.id_pencucian,pen.jenis,addi.id_additional,addi.namaAdd,t.jenis_mobil,t.plat_nomor,"
                 + "t.total_harga "
-                + "FROM transaksi t, pegawai peg, member mem, pencucian pen, additional add"
-                + "WHERE t.id_pegawai = peg.id AND t.id_member = mem.id AND"
-                + "t.id_pencucian = pen.id AND t.id_additional = add.id";
+                + "FROM transaksi t, pegawai peg, member mem, pencucian pen, additional addi "
+                + "WHERE t.id_pegawai = peg.id_pegawai AND t.id_member = mem.id_member AND "
+                + "t.id_pencucian = pen.id_pencucian AND t.id_additional = addi.id_additional";
 
         conMan = new ConnectionManager();
         conn = conMan.connect();
@@ -57,28 +57,26 @@ public class TransaksiServiceImpl implements TransaksiService {
             while (rs.next()) {
                 transaksi = new Transaksi();
 
-                transaksi.setId(rs.getInt("id"));
+                transaksi.setId(rs.getInt("id_transaksi"));
                 transaksi.setTanggalTransaksi(rs.getString("tanggal_transaksi"));
                 transaksi.setJenisMobil(rs.getString("jenis_mobil"));
                 transaksi.setPlatNomor(rs.getString("plat_nomor"));
-                transaksi.setTotalHarga(totalharga(pencucian, additional));
+                transaksi.setTotalHarga(Double.parseDouble(rs.getString("total_harga")));
 
                 pegawai = new Pegawai();
-                pegawai.setId(rs.getInt("id"));
-                pegawai.setNama(rs.getString("nama"));
+                pegawai.setId(rs.getInt("id_pegawai"));
+                pegawai.setNama(rs.getString("nama_pegawai"));
 
                 member = new Member();
-                member.setId(rs.getInt("id"));
-                member.setNama(rs.getString("nama"));
-                member.setAlamat(rs.getString("alamat"));
-                member.setNoHp(rs.getString("noHp"));
+                member.setId(rs.getInt("id_member"));
+                member.setNama(rs.getString("nama_member"));
 
                 pencucian = new Pencucian();
-                pencucian.setId(rs.getInt("id"));
+                pencucian.setId(rs.getInt("id_pencucian"));
                 pencucian.setJenis(rs.getString("jenis"));
 
                 additional = new Additional();
-                additional.setId(rs.getInt("id"));
+                additional.setId(rs.getInt("id_additional"));
                 additional.setNamaAdd(rs.getString("namaAdd"));
 
                 transaksi.setPegawai(pegawai);
@@ -103,15 +101,16 @@ public class TransaksiServiceImpl implements TransaksiService {
         Additional additional = null;
 
         int result = 0;
-        String sql = "INSERT INTO transaksi VALUES"
-                + "('" + object.getPegawai().getId() + "', "
-                + "'" + object.getMember().getId() + "', "
-                + "'" + object.getPencucian().getId() + "', "
-                + "'" + object.getAdditional().getId() + "', "
+        String sql = "INSERT INTO transaksi(id_pegawai,id_member,id_pencucian,id_additional,"
+                + "tanggal_transaksi,jenis_mobil,plat_nomor,total_harga) VALUES"
+                + "(" + object.getPegawai().getId() + ", "
+                + "" + object.getMember().getId() + ", "
+                + "" + object.getPencucian().getId() + ", "
+                + "" + object.getAdditional().getId() + ", "
                 + "'" + object.getTanggalTransaksi() + "', "
                 + "'" + object.getJenisMobil() + "', "
                 + "'" + object.getPlatNomor() + "', "
-                + "" + totalharga(pencucian, additional) + ")";
+                + "" + object.getTotalHarga() + ")";
 
         conMan = new ConnectionManager();
         conn = conMan.connect();
@@ -132,14 +131,14 @@ public class TransaksiServiceImpl implements TransaksiService {
         Pencucian pencucian = null;
         Additional additional = null;
         int result = 0;
-        String sql = "UPDATE transaksi SET id_pegawai='" + object.getPegawai().getId() + "', "
-                + "id_member='" + object.getMember().getId() + "', "
-                + "id_pencucian='" + object.getPencucian().getId() + "', "
-                + "id_additional='" + object.getAdditional().getId() + "', "
+        String sql = "UPDATE transaksi SET id_pegawai=" + object.getPegawai().getId() + ", "
+                + "id_member=" + object.getMember().getId() + ", "
+                + "id_pencucian=" + object.getPencucian().getId() + ", "
+                + "id_additional=" + object.getAdditional().getId() + ", "
                 + "tanggal_transaksi='" + object.getTanggalTransaksi() + "', "
                 + "jenis_mobil='" + object.getJenisMobil() + "', "
                 + "plat_nomor='" + object.getPlatNomor() + "', "
-                + "total_harga=" + totalharga(pencucian, additional) + " "
+                + "total_harga=" + object.getTotalHarga() + " "
                 + "WHERE id_transaksi=" + object.getId() + "";
         conMan = new ConnectionManager();
         conn = conMan.connect();
@@ -163,12 +162,12 @@ public class TransaksiServiceImpl implements TransaksiService {
         Pencucian pencucian = null;
         Additional additional = null;
 
-        String sql = "SELECT t.id_transaksi,peg.id,peg.nama,mem.id,mem.nama,mem.alamat,mem.noHp,"
-                + "t.tanggal_transaksi,t.jenis_mobil,t.plat_nomor,pen.id,pen.jenis,add.id,add.namaAdd,"
-                + "pen.harga + add.harga as t.total_harga "
-                + "FROM transaksi t, pegawai peg, member mem, pencucian pen, additional add"
-                + "WHERE t.id_pegawai = peg.id AND t.id_member = mem.id AND"
-                + "t.id_pencucian = pen.id AND t.id_additional = add.id"
+        String sql = "SELECT t.id_transaksi,peg.id_pegawai,peg.nama_pegawai,mem.id_member,mem.nama_member,"
+                + "t.tanggal_transaksi,pen.id_pencucian,pen.jenis,addi.id_additional,addi.namaAdd,t.jenis_mobil,t.plat_nomor,"
+                + "t.total_harga "
+                + "FROM transaksi t, pegawai peg, member mem, pencucian pen, additional addi "
+                + "WHERE t.id_pegawai = peg.id_pegawai AND t.id_member = mem.id_member AND "
+                + "t.id_pencucian = pen.id_pencucian AND t.id_additional = addi.id_additional "
                 + "AND t.id_transaksi=" + id + "";
 
         conMan = new ConnectionManager();
@@ -181,28 +180,26 @@ public class TransaksiServiceImpl implements TransaksiService {
             while (rs.next()) {
                 transaksi = new Transaksi();
 
-                transaksi.setId(rs.getInt("id"));
+                transaksi.setId(rs.getInt("id_transaksi"));
                 transaksi.setTanggalTransaksi(rs.getString("tanggal_transaksi"));
                 transaksi.setJenisMobil(rs.getString("jenis_mobil"));
                 transaksi.setPlatNomor(rs.getString("plat_nomor"));
-                transaksi.setTotalHarga(totalharga(pencucian, additional));
+                transaksi.setTotalHarga(Double.parseDouble(rs.getString("total_harga")));
 
                 pegawai = new Pegawai();
-                pegawai.setId(rs.getInt("id"));
-                pegawai.setNama(rs.getString("nama"));
+                pegawai.setId(rs.getInt("id_pegawai"));
+                pegawai.setNama(rs.getString("nama_pegawai"));
 
                 member = new Member();
-                member.setId(rs.getInt("id"));
-                member.setNama(rs.getString("nama"));
-                member.setAlamat(rs.getString("alamat"));
-                member.setNoHp(rs.getString("noHp"));
+                member.setId(rs.getInt("id_member"));
+                member.setNama(rs.getString("nama_member"));
 
                 pencucian = new Pencucian();
-                pencucian.setId(rs.getInt("id"));
+                pencucian.setId(rs.getInt("id_pencucian"));
                 pencucian.setJenis(rs.getString("jenis"));
 
                 additional = new Additional();
-                additional.setId(rs.getInt("id"));
+                additional.setId(rs.getInt("id_additional"));
                 additional.setNamaAdd(rs.getString("namaAdd"));
 
                 transaksi.setPegawai(pegawai);
@@ -239,13 +236,4 @@ public class TransaksiServiceImpl implements TransaksiService {
         return result;
     }
 
-    public int totalharga(Pencucian pencucian, Additional additional) {
-        int totalHarga = 0;
-        pencucian = new Pencucian();
-        additional = new Additional();
-
-        totalHarga = pencucian.getHarga() + additional.getHarga();
-
-        return totalHarga;
-    }
 }

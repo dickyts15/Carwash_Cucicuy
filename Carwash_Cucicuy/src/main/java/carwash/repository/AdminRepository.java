@@ -11,4 +11,5 @@ package carwash.repository;
 public interface AdminRepository<T, ID> {
 
     T login(String username, String password);
+    T register(String nama, String username, String password);
 }
