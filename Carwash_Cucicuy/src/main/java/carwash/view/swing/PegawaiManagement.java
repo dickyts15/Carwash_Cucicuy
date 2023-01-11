@@ -5,7 +5,6 @@
 package carwash.view.swing;
 
 import carwash.pojo.Admin;
-import static carwash.view.swing.Dashboard.admin;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
@@ -22,21 +21,11 @@ public class PegawaiManagement extends javax.swing.JFrame {
     public PegawaiManagement() {
         initComponents();
         this.setLocationRelativeTo(null);
-        checkStatus();
     }
     
     public void close() {
         WindowEvent we = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(we);
-    }
-    
-    public void checkStatus() {
-        admin = new Admin();
-        if (admin.isLoginStatus() == false) {
-            JOptionPane.showMessageDialog(null, "Anda Harus Login Terlebih Dahulu!");
-            close();
-            new LoginForm().setVisible(true);
-        }
     }
 
     /**

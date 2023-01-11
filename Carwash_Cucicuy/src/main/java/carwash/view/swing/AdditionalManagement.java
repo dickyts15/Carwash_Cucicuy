@@ -5,7 +5,6 @@
 package carwash.view.swing;
 
 import carwash.pojo.Admin;
-import static carwash.view.swing.Dashboard.admin;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
@@ -22,7 +21,6 @@ public class AdditionalManagement extends javax.swing.JFrame {
     public AdditionalManagement() {
         initComponents();
         this.setLocationRelativeTo(null);
-        checkStatus();
     }
     
     public void close() {
@@ -30,14 +28,6 @@ public class AdditionalManagement extends javax.swing.JFrame {
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(we);
     }
     
-    public void checkStatus() {
-        admin = new Admin();
-        if (admin.isLoginStatus() == false) {
-            JOptionPane.showMessageDialog(null, "Anda Harus Login Terlebih Dahulu!");
-            close();
-            new LoginForm().setVisible(true);
-        }
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.

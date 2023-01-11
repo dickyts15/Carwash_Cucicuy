@@ -19,7 +19,6 @@ import carwash.serviceImpl.AdditionalServiceImpl;
 import carwash.serviceImpl.PencucianServiceImpl;
 import carwash.serviceImpl.TransaksiServiceImpl;
 import carwash.utilities.ConnectionManager;
-import static carwash.view.swing.Dashboard.admin;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.print.PrinterException;
@@ -60,7 +59,6 @@ public class TransaksiManagement extends javax.swing.JFrame {
     public TransaksiManagement() {
         initComponents();
         this.setLocationRelativeTo(null);
-        checkStatus();
         listJenisPencucian();
         listJenisAdditional();
         loadData();
@@ -69,15 +67,6 @@ public class TransaksiManagement extends javax.swing.JFrame {
     public void close() {
         WindowEvent we = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(we);
-    }
-    
-    public void checkStatus() {
-        admin = new Admin();
-        if (admin.isLoginStatus() == false) {
-            JOptionPane.showMessageDialog(null, "Anda Harus Login Terlebih Dahulu!");
-            close();
-            new LoginForm().setVisible(true);
-        }
     }
 
     private void emptyField() {

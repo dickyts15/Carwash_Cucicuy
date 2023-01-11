@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
  */
 public class Dashboard extends javax.swing.JFrame {
 
-    static Admin admin;
+    Admin admin;
 
     /**
      * Creates new form Dashboard
@@ -26,7 +26,6 @@ public class Dashboard extends javax.swing.JFrame {
     public Dashboard() {
         initComponents();
         this.setLocationRelativeTo(null);
-        checkStatus();
     }
 
     public void close() {
@@ -41,14 +40,6 @@ public class Dashboard extends javax.swing.JFrame {
         return admin;
     }
 
-    public void checkStatus() {
-        admin = new Admin();
-        if (admin.isLoginStatus() == false) {
-            JOptionPane.showMessageDialog(null, "Anda Harus Login Terlebih Dahulu!");
-            close();
-            new LoginForm().setVisible(true);
-        }
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -158,7 +149,7 @@ public class Dashboard extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(0, 12, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(lblAdmin))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)

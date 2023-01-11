@@ -8,7 +8,6 @@ import carwash.pojo.Admin;
 import carwash.pojo.Member;
 import carwash.service.MemberService;
 import carwash.serviceImpl.MemberServiceImpl;
-import static carwash.view.swing.Dashboard.admin;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.text.ParseException;
@@ -33,22 +32,12 @@ public class MemberManagement extends javax.swing.JFrame {
     public MemberManagement() {
         initComponents();
         this.setLocationRelativeTo(null);
-        checkStatus();
         loadData();
     }
 
     public void close() {
         WindowEvent we = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(we);
-    }
-    
-    public void checkStatus() {
-        admin = new Admin();
-        if (admin.isLoginStatus() == false) {
-            JOptionPane.showMessageDialog(null, "Anda Harus Login Terlebih Dahulu!");
-            close();
-            new LoginForm().setVisible(true);
-        }
     }
 
     private void emptyField() {
