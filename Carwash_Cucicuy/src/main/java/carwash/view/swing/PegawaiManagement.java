@@ -4,7 +4,6 @@
  */
 package carwash.view.swing;
 
-import carwash.pojo.Admin;
 import carwash.pojo.Pegawai;
 import carwash.service.PegawaiService;
 import carwash.serviceImpl.PegawaiServiceImpl;
@@ -38,6 +37,65 @@ public class PegawaiManagement extends javax.swing.JFrame {
         WindowEvent we = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
         Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(we);
     }
+    
+    private void emptyField() {
+        txtId.setText("");
+        txtName.setText("");
+        txtAlamat.setText("");
+        txtNoHp.setText("");
+        txtStatus.setText("");
+        txtGaji.setText("");
+    }
+        
+
+    private void loadData() {
+        pegawaiService = new PegawaiServiceImpl();
+        List<Pegawai> listPegawai;
+        listPegawai = pegawaiService.findAll();
+        Object[][] objectPegawai = new Object[listPegawai.size()][6];
+
+        int counter = 0;
+
+        for (Pegawai pegawai : listPegawai) {
+            objectPegawai[counter][0] = pegawai.getId();
+            objectPegawai[counter][1] = pegawai.getNama()  ;
+            objectPegawai[counter][2] = pegawai.getAlamat() ;
+            objectPegawai[counter][3] = pegawai.getNoHp();
+            objectPegawai[counter][4] = pegawai.getStatus();
+            objectPegawai[counter][5] = pegawai.getGaji() ;
+            counter++;
+        }
+
+        tblPegawai.setModel(new javax.swing.table.DefaultTableModel(
+                objectPegawai,
+                new String[]{
+                    "ID Pegawai", "Nama Pegawai", "Alamat", "No HP", "Status", "Gaji"
+                }));
+    }
+        private void loadData(Pegawai pegawai) {
+        Object[][] objectPegawai = new Object[1][6];
+
+        objectPegawai[0][0] = pegawai.getId();
+        objectPegawai[0][1] = pegawai.getNama() ;
+        objectPegawai[0][2] = pegawai.getAlamat();
+        objectPegawai[0][3] = pegawai.getNoHp() ;
+        objectPegawai[0][4] = pegawai.getStatus();
+        objectPegawai[0][5] = pegawai.getGaji() ;
+
+        tblPegawai.setModel(new javax.swing.table.DefaultTableModel(
+                objectPegawai,
+                new String[]{
+                    "ID Pegawai", "Nama Pegawai", "Alamat", "No HP", "Status", "Gaji"
+                }));
+    }
+        
+        private Pegawai findPegawai(int id) {
+        Pegawai pegawai = new Pegawai();
+        pegawaiService = new PegawaiServiceImpl();
+        pegawai = pegawaiService.findById(id);
+
+        return pegawai;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -52,6 +110,8 @@ public class PegawaiManagement extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jPanel2 = new javax.swing.JPanel();
+        lbl_Pegawai = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
@@ -71,6 +131,9 @@ public class PegawaiManagement extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
+        txtSearchById = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         backToMenuButton = new javax.swing.JMenuItem();
@@ -95,10 +158,34 @@ public class PegawaiManagement extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("PegawaiManagement");
 
+        jPanel2.setBackground(new java.awt.Color(130, 170, 227));
+
+        lbl_Pegawai.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
+        lbl_Pegawai.setForeground(new java.awt.Color(0, 0, 0));
+        lbl_Pegawai.setText("MANAGE PEGAWAI");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lbl_Pegawai)
+                .addGap(155, 155, 155))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lbl_Pegawai)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         jPanel1.setBackground(new java.awt.Color(130, 170, 227));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel1.setText("Nama: ");
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Nama : ");
 
         txtName.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -107,7 +194,8 @@ public class PegawaiManagement extends javax.swing.JFrame {
         });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel2.setText("ID:");
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("ID      :");
 
         txtId.setEditable(false);
         txtId.addActionListener(new java.awt.event.ActionListener() {
@@ -117,16 +205,20 @@ public class PegawaiManagement extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel3.setText("Alamat:");
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Alamat :");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel5.setText("No Hp:");
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setText("No Hp :");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel6.setText("Status:");
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Status :");
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel7.setText("Gaji:");
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("Gaji     :");
 
         txtAlamat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -156,16 +248,23 @@ public class PegawaiManagement extends javax.swing.JFrame {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
                 {null, null, null, null, null, null}
             },
             new String [] {
                 "ID", "Nama", "Alamat", "No Hp", "Status", "Gaji"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tblPegawai.setGridColor(new java.awt.Color(0, 0, 0));
         tblPegawai.setShowGrid(true);
+        tblPegawai.getTableHeader().setReorderingAllowed(false);
         tblPegawai.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblPegawaiMouseClicked(evt);
@@ -174,6 +273,8 @@ public class PegawaiManagement extends javax.swing.JFrame {
         jScrollPane2.setViewportView(tblPegawai);
 
         btnSave.setBackground(new java.awt.Color(204, 204, 204));
+        btnSave.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(0, 0, 0));
         btnSave.setText("Save");
         btnSave.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -183,6 +284,8 @@ public class PegawaiManagement extends javax.swing.JFrame {
         });
 
         btnUpdate.setBackground(new java.awt.Color(204, 204, 204));
+        btnUpdate.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(0, 0, 0));
         btnUpdate.setText("Update");
         btnUpdate.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -192,6 +295,8 @@ public class PegawaiManagement extends javax.swing.JFrame {
         });
 
         btnDelete.setBackground(new java.awt.Color(204, 204, 204));
+        btnDelete.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(0, 0, 0));
         btnDelete.setText("Delete");
         btnDelete.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -201,6 +306,8 @@ public class PegawaiManagement extends javax.swing.JFrame {
         });
 
         btnClear.setBackground(new java.awt.Color(204, 204, 204));
+        btnClear.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnClear.setForeground(new java.awt.Color(0, 0, 0));
         btnClear.setText("Clear");
         btnClear.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnClear.addActionListener(new java.awt.event.ActionListener() {
@@ -209,53 +316,97 @@ public class PegawaiManagement extends javax.swing.JFrame {
             }
         });
 
+        txtSearchById.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        txtSearchById.setText("Search by ID");
+        txtSearchById.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtSearchByIdMouseClicked(evt);
+            }
+        });
+        txtSearchById.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchByIdActionPerformed(evt);
+            }
+        });
+
+        btnSearch.setBackground(new java.awt.Color(204, 204, 204));
+        btnSearch.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnSearch.setForeground(new java.awt.Color(0, 0, 0));
+        btnSearch.setText("Search");
+        btnSearch.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
+        btnRefresh.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnRefresh.setForeground(new java.awt.Color(0, 0, 0));
+        btnRefresh.setText("Refresh");
+        btnRefresh.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel1)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtAlamat, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 53, Short.MAX_VALUE)
+                                    .addComponent(txtAlamat, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel1)
+                                        .addGap(21, 21, 21))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(23, 23, 23)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(53, 69, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(58, 58, 58)
-                                .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
                                     .addComponent(jLabel7))
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addComponent(txtGaji, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtNoHp, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(46, 46, 46)))
+                                    .addComponent(txtNoHp, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(46, 46, 46))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtSearchById, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28)
+                        .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(29, 29, 29)
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -288,16 +439,22 @@ public class PegawaiManagement extends javax.swing.JFrame {
                             .addComponent(txtGaji, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearchById, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        jMenu1.setText("File");
+        jMenu1.setText("Menu");
 
         backToMenuButton.setText("Back to Dashboard");
         backToMenuButton.addActionListener(new java.awt.event.ActionListener() {
@@ -316,12 +473,14 @@ public class PegawaiManagement extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -459,6 +618,31 @@ public class PegawaiManagement extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_backToMenuButtonActionPerformed
 
+    private void txtSearchByIdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSearchByIdMouseClicked
+        txtSearchById.setText("");
+    }//GEN-LAST:event_txtSearchByIdMouseClicked
+
+    private void txtSearchByIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchByIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchByIdActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        int id;
+        Pegawai searchedPegawai = new Pegawai();
+
+        id = Integer.parseInt(txtSearchById.getText());
+        searchedPegawai = findPegawai(id);
+        if (searchedPegawai != null) {
+            loadData(searchedPegawai);
+        } else {
+            JOptionPane.showMessageDialog(null, "Data Tidak Ditemukan.");
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        loadData();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -498,7 +682,9 @@ public class PegawaiManagement extends javax.swing.JFrame {
     private javax.swing.JMenuItem backToMenuButton;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -511,66 +697,20 @@ public class PegawaiManagement extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lbl_Pegawai;
     private javax.swing.JTable tblPegawai;
     private javax.swing.JTextField txtAlamat;
     private javax.swing.JTextField txtGaji;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtNoHp;
+    private javax.swing.JTextField txtSearchById;
     private javax.swing.JTextField txtStatus;
     // End of variables declaration//GEN-END:variables
 
-    private void emptyField() {
-        txtId.setText("");
-        txtName.setText("");
-        txtAlamat.setText("");
-        txtNoHp.setText("");
-        txtStatus.setText("");
-        txtGaji.setText("");
-    }
-        
-
-    private void loadData() {
-        pegawaiService = new PegawaiServiceImpl();
-        List<Pegawai> listPegawai;
-        listPegawai = pegawaiService.findAll();
-        Object[][] objectPegawai = new Object[listPegawai.size()][6];
-
-        int counter = 0;
-
-        for (Pegawai pegawai : listPegawai) {
-            objectPegawai[counter][0] = pegawai.getId();
-            objectPegawai[counter][1] = pegawai.getNama()  ;
-            objectPegawai[counter][2] = pegawai.getAlamat() ;
-            objectPegawai[counter][3] = pegawai.getNoHp();
-            objectPegawai[counter][4] = pegawai.getStatus();
-            objectPegawai[counter][5] = pegawai.getGaji() ;
-            counter++;
-        }
-
-        tblPegawai.setModel(new javax.swing.table.DefaultTableModel(
-                objectPegawai,
-                new String[]{
-                    "ID Pegawai", "Nama Pegawai", "Alamat", "No HP", "Status", "Gaji"
-                }));
-    }
-        private void loadData(Pegawai pegawai) {
-        Object[][] objectPegawai = new Object[1][6];
-
-        objectPegawai[0][0] = pegawai.getId();
-        objectPegawai[0][1] = pegawai.getNama() ;
-        objectPegawai[0][2] = pegawai.getAlamat();
-        objectPegawai[0][3] = pegawai.getNoHp() ;
-        objectPegawai[0][4] = pegawai.getStatus();
-        objectPegawai[0][5] = pegawai.getGaji() ;
-
-        tblPegawai.setModel(new javax.swing.table.DefaultTableModel(
-                objectPegawai,
-                new String[]{
-                    "ID Pegawai", "Nama Pegawai", "Alamat", "No HP", "Status", "Gaji"
-                }));
-    }
+    
 }

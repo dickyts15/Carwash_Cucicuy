@@ -27,10 +27,7 @@ CREATE TABLE IF NOT EXISTS `additional` (
   PRIMARY KEY (`id_additional`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table carwash.additional: ~2 rows (approximately)
-INSERT INTO `additional` (`id_additional`, `namaAdd`, `harga_additional`) VALUES
-	(0, 'No Additional', 0),
-	(1, 'Vacuum', 15000);
+-- Data exporting was unselected.
 
 -- Dumping structure for table carwash.admin
 CREATE TABLE IF NOT EXISTS `admin` (
@@ -39,11 +36,9 @@ CREATE TABLE IF NOT EXISTS `admin` (
   `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `password` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`id_admin`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table carwash.admin: ~1 rows (approximately)
-INSERT INTO `admin` (`id_admin`, `nama_admin`, `username`, `password`) VALUES
-	(1, 'dicky', 'admin', 'admin123');
+-- Data exporting was unselected.
 
 -- Dumping structure for table carwash.member
 CREATE TABLE IF NOT EXISTS `member` (
@@ -54,13 +49,9 @@ CREATE TABLE IF NOT EXISTS `member` (
   `tanggal_pendaftaran` date DEFAULT NULL,
   `masa_aktif` date DEFAULT NULL,
   PRIMARY KEY (`id_member`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table carwash.member: ~3 rows (approximately)
-INSERT INTO `member` (`id_member`, `nama_member`, `alamat`, `noHp`, `tanggal_pendaftaran`, `masa_aktif`) VALUES
-	(0, 'NonMember', '', '', NULL, NULL),
-	(3, 'Andi', 'Cikutra', '08999085719', '2023-01-08', '2028-01-08'),
-	(4, 'Budi', 'Jakarta', '08981231021', '2023-01-04', '2023-01-20');
+-- Data exporting was unselected.
 
 -- Dumping structure for table carwash.pegawai
 CREATE TABLE IF NOT EXISTS `pegawai` (
@@ -73,10 +64,7 @@ CREATE TABLE IF NOT EXISTS `pegawai` (
   PRIMARY KEY (`id_pegawai`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table carwash.pegawai: ~2 rows (approximately)
-INSERT INTO `pegawai` (`id_pegawai`, `nama_pegawai`, `alamat`, `noHp`, `status`, `gaji`) VALUES
-	(1, 'agus', 'cikutra', '0898231312', 'aktif', 2500000),
-	(2, 'budi', 'antapani', '089990857192', 'aktif', 3000000);
+-- Data exporting was unselected.
 
 -- Dumping structure for table carwash.pencucian
 CREATE TABLE IF NOT EXISTS `pencucian` (
@@ -86,12 +74,7 @@ CREATE TABLE IF NOT EXISTS `pencucian` (
   PRIMARY KEY (`id_pencucian`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table carwash.pencucian: ~4 rows (approximately)
-INSERT INTO `pencucian` (`id_pencucian`, `jenis`, `harga_pencucian`) VALUES
-	(1, 'Steam', 30000),
-	(2, 'Steam Salju', 40000),
-	(3, 'Steam Hidrolik', 40000),
-	(4, 'Steam Hidrolik Salju', 60000);
+-- Data exporting was unselected.
 
 -- Dumping structure for table carwash.transaksi
 CREATE TABLE IF NOT EXISTS `transaksi` (
@@ -113,11 +96,9 @@ CREATE TABLE IF NOT EXISTS `transaksi` (
   CONSTRAINT `FK_transaksi_additional` FOREIGN KEY (`id_additional`) REFERENCES `additional` (`id_additional`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_transaksi_member` FOREIGN KEY (`id_member`) REFERENCES `member` (`id_member`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `FK_transaksi_pencucian` FOREIGN KEY (`id_pencucian`) REFERENCES `pencucian` (`id_pencucian`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Dumping data for table carwash.transaksi: ~1 rows (approximately)
-INSERT INTO `transaksi` (`id_transaksi`, `id_pegawai`, `id_member`, `id_pencucian`, `id_additional`, `tanggal_transaksi`, `jenis_mobil`, `plat_nomor`, `total_harga`) VALUES
-	(1, 1, 0, 1, 0, '2023-01-08', 'APV', 'B1231D', 30000);
+-- Data exporting was unselected.
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

@@ -142,6 +142,7 @@ public class MemberManagement extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(130, 170, 227));
 
         lbl_Member.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
+        lbl_Member.setForeground(new java.awt.Color(0, 0, 0));
         lbl_Member.setText("MANAGE MEMBER");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -164,6 +165,7 @@ public class MemberManagement extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(130, 170, 227));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("ID Member : ");
 
         txtIdMember.setEditable(false);
@@ -174,6 +176,7 @@ public class MemberManagement extends javax.swing.JFrame {
         });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Nama         :");
 
         txtNama.addActionListener(new java.awt.event.ActionListener() {
@@ -183,6 +186,7 @@ public class MemberManagement extends javax.swing.JFrame {
         });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Alamat       : ");
 
         txtAlamat.addActionListener(new java.awt.event.ActionListener() {
@@ -192,12 +196,15 @@ public class MemberManagement extends javax.swing.JFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
         jLabel4.setText("No HP            :");
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Tanggal Daftar :");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Masa Aktif       :");
 
         txtNoHp.addActionListener(new java.awt.event.ActionListener() {
@@ -208,6 +215,7 @@ public class MemberManagement extends javax.swing.JFrame {
 
         btnSave.setBackground(new java.awt.Color(204, 204, 204));
         btnSave.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnSave.setForeground(new java.awt.Color(0, 0, 0));
         btnSave.setText("Save");
         btnSave.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -218,6 +226,7 @@ public class MemberManagement extends javax.swing.JFrame {
 
         btnUpdate.setBackground(new java.awt.Color(204, 204, 204));
         btnUpdate.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnUpdate.setForeground(new java.awt.Color(0, 0, 0));
         btnUpdate.setText("Update");
         btnUpdate.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
@@ -228,6 +237,7 @@ public class MemberManagement extends javax.swing.JFrame {
 
         btnDelete.setBackground(new java.awt.Color(204, 204, 204));
         btnDelete.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(0, 0, 0));
         btnDelete.setText("Delete");
         btnDelete.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -238,6 +248,7 @@ public class MemberManagement extends javax.swing.JFrame {
 
         btnClear.setBackground(new java.awt.Color(204, 204, 204));
         btnClear.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnClear.setForeground(new java.awt.Color(0, 0, 0));
         btnClear.setText("Clear");
         btnClear.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnClear.addActionListener(new java.awt.event.ActionListener() {
@@ -298,6 +309,7 @@ public class MemberManagement extends javax.swing.JFrame {
 
         btnSearch.setBackground(new java.awt.Color(204, 204, 204));
         btnSearch.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnSearch.setForeground(new java.awt.Color(0, 0, 0));
         btnSearch.setText("Search");
         btnSearch.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnSearch.addActionListener(new java.awt.event.ActionListener() {
@@ -308,6 +320,7 @@ public class MemberManagement extends javax.swing.JFrame {
 
         btnRefresh.setBackground(new java.awt.Color(204, 204, 204));
         btnRefresh.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
+        btnRefresh.setForeground(new java.awt.Color(0, 0, 0));
         btnRefresh.setText("Refresh");
         btnRefresh.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btnRefresh.addActionListener(new java.awt.event.ActionListener() {
@@ -408,12 +421,12 @@ public class MemberManagement extends javax.swing.JFrame {
                     .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSearchById, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        jMenu1.setText("File");
+        jMenu1.setText("Menu");
 
         backToMenuButton.setText("Back to Dashboard");
         backToMenuButton.addActionListener(new java.awt.event.ActionListener() {
