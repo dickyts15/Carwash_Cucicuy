@@ -5,8 +5,17 @@
 package carwash.view.swing;
 
 import carwash.pojo.Admin;
+import carwash.pojo.Pegawai;
+import carwash.service.PegawaiService;
+import carwash.serviceImpl.PegawaiServiceImpl;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,13 +23,15 @@ import javax.swing.JOptionPane;
  * @author ASUS
  */
 public class PegawaiManagement extends javax.swing.JFrame {
-
+    
+    PegawaiService pegawaiService;
     /**
      * Creates new form PegawaiManagement
      */
     public PegawaiManagement() {
         initComponents();
         this.setLocationRelativeTo(null);
+        loadData();
     }
     
     public void close() {
@@ -52,7 +63,7 @@ public class PegawaiManagement extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         txtAlamat = new javax.swing.JTextField();
         txtNoHp = new javax.swing.JTextField();
-        jTextField1 = new javax.swing.JTextField();
+        txtGaji = new javax.swing.JTextField();
         txtStatus = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblPegawai = new javax.swing.JTable();
@@ -98,6 +109,7 @@ public class PegawaiManagement extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText("ID:");
 
+        txtId.setEditable(false);
         txtId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIdActionPerformed(evt);
@@ -237,7 +249,7 @@ public class PegawaiManagement extends javax.swing.JFrame {
                                     .addComponent(jLabel7))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtGaji, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtNoHp, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
@@ -273,7 +285,7 @@ public class PegawaiManagement extends javax.swing.JFrame {
                             .addComponent(txtAlamat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3)
                             .addComponent(jLabel7)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtGaji, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -336,23 +348,104 @@ public class PegawaiManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_txtStatusActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        // TODO add your handling code here:
+        String nama, alamat, noHp, status;
+        
+        double gaji;
+
+        pegawaiService = new PegawaiServiceImpl();
+
+        nama = txtName.getText();
+        alamat = txtAlamat.getText();
+        noHp = txtNoHp.getText();
+        status = txtStatus.getText();
+        gaji = gaji = Double.valueOf(txtGaji.getText().toString());
+
+        Pegawai pegawai = new Pegawai();
+        
+        pegawai.setNama(nama);
+        pegawai.setAlamat(alamat);
+        pegawai.setNoHp(noHp);
+        pegawai.setStatus(status);
+        pegawai.setGaji(gaji);
+
+        pegawaiService.create(pegawai);
+        JOptionPane.showMessageDialog(null, "Data Pegawai berhasil ditambahkan ...");
+        loadData();
+        emptyField();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        // TODO add your handling code here:
+        String nama, alamat, noHp, status;
+        int id;
+        double gaji;
+
+        pegawaiService = new PegawaiServiceImpl();
+
+        id = Integer.parseInt(txtId.getText().toString());
+        nama = txtName.getText();
+        alamat = txtAlamat.getText();
+        noHp = txtNoHp.getText();
+        status = txtStatus.getText();
+        gaji = gaji = Double.valueOf(txtGaji.getText().toString());
+
+        Pegawai pegawai = new Pegawai();
+        pegawai.setId(id);
+        pegawai.setNama(nama);
+        pegawai.setAlamat(alamat);
+        pegawai.setNoHp(noHp);
+        pegawai.setStatus(status);
+        pegawai.setGaji(gaji);
+
+        pegawaiService.update(pegawai);
+        JOptionPane.showMessageDialog(null, "Data Pegawai berhasil diupdate ...");
+        loadData();
+        emptyField();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
+        int id;
+        pegawaiService = new PegawaiServiceImpl();
+        int dialogButton = JOptionPane.YES_NO_OPTION;
+
+        id = Integer.parseInt(txtId.getText());
+
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Yakin ingin menghapus?", "Warning", dialogButton);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            pegawaiService.delete(id);
+            loadData();
+            emptyField();
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
+        emptyField();
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void tblPegawaiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPegawaiMouseClicked
         // TODO add your handling code here:
+        Pegawai pegawai = null;
+        
+        String nama, alamat, noHp, status;
+        int id;
+        double gaji;
+       
+        int row = tblPegawai.getSelectedRow();
+        id = Integer.parseInt(tblPegawai.getValueAt(row, 0).toString());
+        nama = tblPegawai.getValueAt(row, 1).toString();
+        alamat = tblPegawai.getValueAt(row, 2).toString();
+        noHp = tblPegawai.getValueAt(row, 3).toString();
+        status = tblPegawai.getValueAt(row, 4).toString();
+        gaji = Double.valueOf(tblPegawai.getValueAt(row, 5).toString());
+
+        txtId.setText(id + "");
+        txtName.setText(nama);
+        txtAlamat.setText(alamat);
+        txtNoHp.setText(noHp);
+        txtStatus.setText(status);
+        txtGaji.setText(gaji + "");
+
     }//GEN-LAST:event_tblPegawaiMouseClicked
 
     private void backToMenuButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToMenuButtonActionPerformed
@@ -421,12 +514,63 @@ public class PegawaiManagement extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tblPegawai;
     private javax.swing.JTextField txtAlamat;
+    private javax.swing.JTextField txtGaji;
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtNoHp;
     private javax.swing.JTextField txtStatus;
     // End of variables declaration//GEN-END:variables
+
+    private void emptyField() {
+        txtId.setText("");
+        txtName.setText("");
+        txtAlamat.setText("");
+        txtNoHp.setText("");
+        txtStatus.setText("");
+        txtGaji.setText("");
+    }
+        
+
+    private void loadData() {
+        pegawaiService = new PegawaiServiceImpl();
+        List<Pegawai> listPegawai;
+        listPegawai = pegawaiService.findAll();
+        Object[][] objectPegawai = new Object[listPegawai.size()][6];
+
+        int counter = 0;
+
+        for (Pegawai pegawai : listPegawai) {
+            objectPegawai[counter][0] = pegawai.getId();
+            objectPegawai[counter][1] = pegawai.getNama()  ;
+            objectPegawai[counter][2] = pegawai.getAlamat() ;
+            objectPegawai[counter][3] = pegawai.getNoHp();
+            objectPegawai[counter][4] = pegawai.getStatus();
+            objectPegawai[counter][5] = pegawai.getGaji() ;
+            counter++;
+        }
+
+        tblPegawai.setModel(new javax.swing.table.DefaultTableModel(
+                objectPegawai,
+                new String[]{
+                    "ID Pegawai", "Nama Pegawai", "Alamat", "No HP", "Status", "Gaji"
+                }));
+    }
+        private void loadData(Pegawai pegawai) {
+        Object[][] objectPegawai = new Object[1][6];
+
+        objectPegawai[0][0] = pegawai.getId();
+        objectPegawai[0][1] = pegawai.getNama() ;
+        objectPegawai[0][2] = pegawai.getAlamat();
+        objectPegawai[0][3] = pegawai.getNoHp() ;
+        objectPegawai[0][4] = pegawai.getStatus();
+        objectPegawai[0][5] = pegawai.getGaji() ;
+
+        tblPegawai.setModel(new javax.swing.table.DefaultTableModel(
+                objectPegawai,
+                new String[]{
+                    "ID Pegawai", "Nama Pegawai", "Alamat", "No HP", "Status", "Gaji"
+                }));
+    }
 }
